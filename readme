@@ -1,0 +1,23 @@
+此服務用來被LineBot所呼叫。
+
+LineBot : heroku
+YiFanServer : Local Server
+
+journalctl : 調閱systemd日誌
+journalctl -u YiFanServer.service
+
+僅保留過去兩小時資料
+sudo journalctl --vacuum-time=600s
+
+清除日誌資料
+sudo rm -rf /var/log/journal/*
+journalctl -u YiFanServer.service
+
+Server 重起手順
+sudo rm /etc/systemd/system/YiFanServer.service
+sudo cp /home/yifan/文件/YiFanServer/YiFanServer.service /etc/systemd/system/
+sudo systemctl stop YiFanServer.service
+sudo systemctl daemon-reload
+sudo systemctl start YiFanServer.service
+sudo systemctl status YiFanServer.service
+

@@ -1,0 +1,15 @@
+
+[Unit]
+Description=A Backend for Linebot.
+After=network-online.target local-fs.target
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /home/yifan/文件/YiFanServer/server_app.py
+KillSignal=SIGINT
+TimeoutSec=infinity
+RestartSec=10
+Restart=always
+Environment="PYTHONPATH=$PYTHONPATH:/home/yifan/.local/lib/python3.8/site-packages"
+[Install]
+WantedBy=multi-user.target
+
