@@ -97,8 +97,8 @@ def ShowMode():
 
       
 if __name__ == '__main__':
-  #app.run(ssl_context=('/SSL/YiFanServer.crt', '/SSL/YiFanServer.key'),host="0.0.0.0", port=4000 , threaded=True)
-  app.run(host="0.0.0.0", port=4000 , threaded=True)
+  #app.run(ssl_context=('./SSL/YiFanServer.crt', './SSL/YiFanServer.key'),host="0.0.0.0", port=5000 , threaded=True)
+  app.run(host="0.0.0.0", port=5000 , threaded=True)
 #添加SSL
 #https://medium.com/@charming_rust_oyster_221/flask-%E9%85%8D%E7%BD%AE-https-%E7%B6%B2%E7%AB%99-ssl-%E5%AE%89%E5%85%A8%E8%AA%8D%E8%AD%89-36dfeb609fa8
 #產生KEY

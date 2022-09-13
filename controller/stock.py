@@ -4,6 +4,7 @@ from flask import app, request
 from flask.wrappers import Response
 import json , logging , string
 from backend_models.stocksearch import *
+from backend_models.LinebotPusher import *
 from app_utils.app_result import result_json
 #-------------共用函式-------------
 from enum import Enum, unique
@@ -80,6 +81,18 @@ def FuncEventExecSDK(EventSDKAPI,*args):
 
 
 
+@controller.route('/LINEPost', methods=["POST"])
+def set_Echo():  
+    eventName:str    = 'text'  
+    eventSDKAPI:function =LinePost
+    expectType:type      = string#int or bool
+    returnStr            = ""
+    returnStr_200        = "Success"
+    returnStr_400        = "Please check paras or query valid."
+    FuncEventLog(eventName,request.method)
+    status=FuncGetFormValue(expectType,eventName)
+    returnStr = FuncEventExecSDK(eventSDKAPI,status)
+    return result_json(200, returnStr)
     
 @controller.route('/Echo', methods=["POST"])
 def set_Echo():  

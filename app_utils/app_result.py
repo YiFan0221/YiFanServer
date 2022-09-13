@@ -5,10 +5,23 @@ import json
 
 
 def requests_api(mtext):
-    ServerURL ='http://yfnoip.ddns.net:4000/Stock'
-    #ServerURL ='http://114.34.165.245:4000/Stock'
-    apiurl = ServerURL+'/Echo'
-    sendobj = {'text':mtext}    
+    ###
+    #用來執行根據mtext 轉發的api
+    ###
+    ServerURL ='http://yfnoip.ddns.net:5000/Stock'
+    
+    #ex. 
+    # [ testSpace/Echo,HI你好 ] 
+    # mtext==[/Echo,HI你好]
+    input_para = mtext[9:].split(',')
+    #API URL 
+    apiurl = ServerURL+input_para[0]
+    #Para
+    sendobj = None
+    if len(input_para) > 1:
+      sendobj = {'text':input_para[1]}        
+    
+    #post
     StateSt = requests.post(apiurl, json=sendobj )
     #header = {"content-type": "application/json"}
     #StateSt = requests.post(apiurl, json=sendobj , headers=header, verify=False )
