@@ -82,7 +82,7 @@ def FuncEventExecSDK(EventSDKAPI,*args):
 
 
 @controller.route('/LINEPost', methods=["POST"])
-def set_Echo():  
+def Post_LINE():  
     eventName:str    = 'text'  
     eventSDKAPI:function =LinePost
     expectType:type      = string#int or bool
