@@ -107,8 +107,8 @@ def set_Echo():
     consumes:
     -   application/json
     parameters:
-    -   name: body
-        in: Json/string
+    -   name: EchoInfo
+        in: body
         required: true
         schema:
         properties:
