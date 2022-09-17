@@ -12,6 +12,7 @@ from enum import Enum, unique
 class BodyType(Enum):
     applicationjson = 'multipart/form-data'
     multipartformdata = 'application/json'
+    
 def FuncGetFormValue(DataType:type , EventName,):
     #TODO def FuncGetFormValue(DataType:type,EventName,)
     #根據傳入種類找尋網頁中屬於{EventName}的值
@@ -19,12 +20,11 @@ def FuncGetFormValue(DataType:type , EventName,):
 
     #從Body取值
     getData:Any = None
-    if request.mimetype==BodyType.multipartformdata.value:
-        # getData=request.json[EventName]
-        # getData= getData.json['value']
+    if request.content_type.startswith('application/json'):         
         data = json.loads(request.data)
-        getData = data[EventName]              
-    elif request.mimetype==BodyType.applicationjson.value:            
+        getData = data[EventName]   
+        
+    elif request.content_type.startswith('multipart/form-data'):
         getData=request.form.get(EventName) 
     else:
         return None
@@ -83,7 +83,7 @@ def FuncEventExecSDK(EventSDKAPI,*args):
 
 @controller.route('/LINEPost', methods=["POST"])
 def Post_LINE():  
-    eventName:str    = 'text'  
+    eventName:str    = 'text'
     eventSDKAPI:function =LinePost
     expectType:type      = string#int or bool
     returnStr            = ""
@@ -96,16 +96,45 @@ def Post_LINE():
     
 @controller.route('/Echo', methods=["POST"])
 def set_Echo():  
-    eventName:str    = 'text'  
-    eventSDKAPI:function =Func_Echo
-    expectType:type      = string#int or bool
-    returnStr            = ""
-    returnStr_200        = "Success"
-    returnStr_400        = "Please check paras or query valid."
-    FuncEventLog(eventName,request.method)
-    status=FuncGetFormValue(expectType,eventName)
-    returnStr = FuncEventExecSDK(eventSDKAPI,status)
-    return result_json(200, returnStr)
+  """
+    回應與傳入資訊相同的資料
+    ---
+    tags:
+    -   Common API
+    description: 
+    -   回應與傳入資訊相同的資料，通常用在LINEBOT測試
+
+    consumes:
+    -   application/json
+    parameters:
+    -   name: body
+        in: Json/string
+        required: true
+        schema:
+        properties:
+            text:
+                type: string
+                description: 輸入需要被回傳的資訊
+                example: Hi~YiFanServer
+        required:
+            - text            
+
+    responses:
+      200:
+        description: Success   
+      400:
+        description: Please check paras or query valid.
+  """     
+  eventName:str    = 'text'  
+  eventSDKAPI:function =Func_Echo
+  expectType:type      = string#int or bool
+  returnStr            = ""
+  returnStr_200        = "Success"
+  returnStr_400        = "Please check paras or query valid."
+  FuncEventLog(eventName,request.method)
+  status=FuncGetFormValue(expectType,eventName)
+  returnStr = FuncEventExecSDK(eventSDKAPI,status)
+  return result_json(200, returnStr)
 
     
 

@@ -24,12 +24,15 @@ Mode = 'setting'
 
 app = Flask(__name__)
 app.config['SWAGGER'] = {
-    "title": "TeaOrFish",
-    "description": "Flasgger by TeaOrFish,stockSearch in Linebot",
-    "version": "1.0.2",
+    "title": "YiFanServer",
+    "description": "Backend server of get linebot request.",
+    "version": "1.0.0",
     "termsOfService": "",
     "hide_top_bar": True
 }
+# http://localhost:5000/apidocs
+# 如何寫yaml
+# https://codertw.com/%E7%A8%8B%E5%BC%8F%E8%AA%9E%E8%A8%80/614070/#outline__1_2_3
 CORS(app)
 Swagger(app)
 
@@ -41,7 +44,7 @@ app.register_blueprint(stock_controller        , url_prefix='/Stock')
 app.register_blueprint(tickerOrder_controller  , url_prefix='/Ticker')
                             
 
-print("..........Flask start!")
+print(".......... Backend service start!")
 
 @app.route("/")
 def home():
