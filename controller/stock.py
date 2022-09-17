@@ -83,16 +83,45 @@ def FuncEventExecSDK(EventSDKAPI,*args):
 
 @controller.route('/LINEPost', methods=["POST"])
 def Post_LINE():  
-    eventName:str    = 'text'
-    eventSDKAPI:function =LinePost
-    expectType:type      = string#int or bool
-    returnStr            = ""
-    returnStr_200        = "Success"
-    returnStr_400        = "Please check paras or query valid."
-    FuncEventLog(eventName,request.method)
-    status=FuncGetFormValue(expectType,eventName)
-    returnStr = FuncEventExecSDK(eventSDKAPI,status)
-    return result_json(200, returnStr)
+  """
+    推送資訊到LINEBOT
+    ---
+    tags:
+    -   Common API
+    description: 
+    -   主動推送資訊到LINEBOT
+
+    consumes:
+    -   application/json
+    parameters:
+    -   name: EchoInfo
+        in: body
+        required: true
+        schema:
+        properties:
+            text:
+                description: 要推送的資料
+                type: string                
+                example: Hi~this from YiFanServer.swagger
+        required:
+            - text            
+
+    responses:
+      200:
+        description: Success   
+      400:
+        description: Please check paras or query valid.
+  """     
+  eventName:str    = 'text'
+  eventSDKAPI:function =LinePost
+  expectType:type      = string#int or bool
+  returnStr            = ""
+  returnStr_200        = "Success"
+  returnStr_400        = "Please check paras or query valid."
+  FuncEventLog(eventName,request.method)
+  status=FuncGetFormValue(expectType,eventName)
+  returnStr = FuncEventExecSDK(eventSDKAPI,status)
+  return result_json(200, returnStr)
     
 @controller.route('/Echo', methods=["POST"])
 def set_Echo():  
@@ -112,9 +141,9 @@ def set_Echo():
         required: true
         schema:
         properties:
-            text:
-                type: string
+            text:                
                 description: 輸入需要被回傳的資訊
+                type: string
                 example: Hi~YiFanServer
         required:
             - text            
