@@ -3,10 +3,8 @@ from flask_cors import CORS
 from linebot import  WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import * #MessageEvent,TextMessage,ImageSendMessage
-
 import tempfile
 from controller import stock_controller, modbus_controller,ssh_controller,tickerOrder_controller
-
 from flasgger import Swagger
 from requests import *
 
@@ -16,10 +14,10 @@ from backend_models.picIV       import Pic_Auth
 from controller.stock           import *
 from controller.tickerOrder     import *
 from app_utils.app_result       import requests_api
+from MongoDB.FuncMongodb        import *
 
 handler = WebhookHandler('976067291be71b6c3e6a3d5c161db416')
 
- 
 Mode = 'setting'
 
 app = Flask(__name__)
@@ -44,41 +42,17 @@ app.register_blueprint(stock_controller        , url_prefix='/Stock')
 app.register_blueprint(tickerOrder_controller  , url_prefix='/Ticker')
                             
 
+print("Connecting MongoDB.")
+Clientinit()
+Insert_one()
+print("Connected!")
+
 print(".......... Backend service start!")
 
 @app.route("/")
 def home():
   return render_template("home.html")
-
-# @app.route("/callback",methods=['POST'])
-# def callback():
-#   """
-#     接收到LINE發過來的資訊
-#     ---
-#     tags:
-#       - Linebot
-#     description:
-#       接收到LINE發過來的資訊,並藉此放到@handle中做處理
-#     produces: application/json,
-#     parameters:
-#     - name: name
-#       in: path
-#       required: true
-#       type: string    
-#     responses:
-#       400:
-#         description: InvalidSignatureError
-#       200:
-#         description: Receive Line request.
-#   """
-#   signature = request.headers['X-Line-Signature']
-#   body = request.get_data(as_text=True)
-#   try:
-#       handler.handle(body,signature)
-#   except InvalidSignatureError:
-#       abort(400)
-#   return 'OK'
-
+      
       
 def SwitchSettingMode():
   global Mode
@@ -87,7 +61,6 @@ def SwitchSettingMode():
   else :
     Mode = 'setting'
   return '更換為'+Mode
-    
 def CheckSettingMode():
   global Mode
   if(Mode == 'setting'):
@@ -102,6 +75,15 @@ def ShowMode():
 if __name__ == '__main__':
   #app.run(ssl_context=('./SSL/YiFanServer.crt', './SSL/YiFanServer.key'),host="0.0.0.0", port=5000 , threaded=True)
   app.run(host="0.0.0.0", port=5000 , threaded=True)
+  
+  
+  
+  
+  
+  
+  
+  
+  
 #添加SSL
 #https://medium.com/@charming_rust_oyster_221/flask-%E9%85%8D%E7%BD%AE-https-%E7%B6%B2%E7%AB%99-ssl-%E5%AE%89%E5%85%A8%E8%AA%8D%E8%AD%89-36dfeb609fa8
 #產生KEY

@@ -21,3 +21,33 @@ sudo systemctl daemon-reload
 sudo systemctl start YiFanServer.service
 sudo systemctl status YiFanServer.service
 
+
+<Git>
+remote repository fetch:
+http登入改為使用token 登入
+
+$ git clone https://github.com/username/repo.git
+Username: your_username
+Password: your_token
+
+
+<Cloud MongoDB>
+https://cloud.mongodb.com/v2/632d1df8af84ef7bf676ba5d#clusters/connect?clusterId=APILOG0
+
+安裝套件
+python3 -m pip install "pymongo[srv]"
+https://www.mongodb.com/docs/drivers/pymongo/#connect-to-mongodb-atlas
+
+
+Connect:
+mongodb+srv://user0:<password>@apilog0.amcx94o.mongodb.net/test
+
+
+<AWS>
+安裝清單
+AWS CIL
+>>$ curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+>>unzip awscliv2.zip
+>>sudo ./aws/install
+
+pip install boto3

@@ -8,6 +8,8 @@ from backend_models.LinebotPusher import *
 from app_utils.app_result import result_json
 #-------------共用函式-------------
 from enum import Enum, unique
+
+    
 @unique
 class BodyType(Enum):
     applicationjson = 'multipart/form-data'
@@ -168,7 +170,7 @@ def set_Echo():
     
 
 @controller.route("/SearchStock",methods=['GET'])
-def Get_SearchStock(mtext):
+def Get_SearchStock():
   """
     搜尋對應的股票資訊(爬蟲)
     ---
@@ -188,7 +190,17 @@ def Get_SearchStock(mtext):
       200:
         description: Receive Line request.
   """
-  m_data =Func_SearchStock_cnyes(mtext)
+  eventName:str    = 'text'  
+  eventSDKAPI:function =Func_SearchStock_cnyes
+  expectType:type      = string#int or bool
+  returnStr            = ""
+  returnStr_200        = "Success"
+  returnStr_400        = "Please check paras or query valid."
+  FuncEventLog(eventName,request.method)
+  status=FuncGetFormValue(expectType,eventName)
+  returnStr = FuncEventExecSDK(eventSDKAPI,status)
+  
+  m_data =returnStr
   if(type(m_data)== str):
       rtn_text =m_data
   else:

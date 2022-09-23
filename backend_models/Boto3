@@ -1,0 +1,98 @@
+class Movies:
+    """Encapsulates an Amazon DynamoDB table of movie data."""
+    def __init__(self, dyn_resource):
+        """
+        :param dyn_resource: A Boto3 DynamoDB resource.
+        """
+        self.dyn_resource = dyn_resource
+        self.table = None
+        
+
+    def add_movie(self, title, year, plot, rating):
+        """
+        Adds a movie to the table.
+
+        :param title: The title of the movie.
+        :param year: The release year of the movie.
+        :param plot: The plot summary of the movie.
+        :param rating: The quality rating of the movie.
+        """
+        try:
+            self.table.put_item(
+                Item={
+                    'year': year,
+                    'title': title,
+                    'info': {'plot': plot, 'rating': Decimal(str(rating))}})
+        except ClientError as err:
+            logger.error(
+                "Couldn't add movie %s to table %s. Here's why: %s: %s",
+                title, self.table.name,
+                err.response['Error']['Code'], err.response['Error']['Message'])
+            raise
+
+    def get_movie(self, title, year):
+        """
+        Gets movie data from the table for a specific movie.
+
+        :param title: The title of the movie.
+        :param year: The release year of the movie.
+        :return: The data about the requested movie.
+        """
+        try:
+            response = self.table.get_item(Key={'year': year, 'title': title})
+        except ClientError as err:
+            logger.error(
+                "Couldn't get movie %s from table %s. Here's why: %s: %s",
+                title, self.table.name,
+                err.response['Error']['Code'], err.response['Error']['Message'])
+            raise
+        else:
+            return response['Item']
+
+
+    def query_movies(self, year):
+        """
+        Queries for movies that were released in the specified year.
+
+        :param year: The year to query.
+        :return: The list of movies that were released in the specified year.
+        """
+        try:
+            response = self.table.query(KeyConditionExpression=Key('year').eq(year))
+        except ClientError as err:
+            logger.error(
+                "Couldn't query for movies released in %s. Here's why: %s: %s", year,
+                err.response['Error']['Code'], err.response['Error']['Message'])
+            raise
+        else:
+            return response['Items']
+
+    def query_and_project_movies(self, year, title_bounds):
+        """
+        Query for movies that were released in a specified year and that have titles
+        that start within a range of letters. A projection expression is used
+        to return a subset of data for each movie.
+
+        :param year: The release year to query.
+        :param title_bounds: The range of starting letters to query.
+        :return: The list of movies.
+        """
+        try:
+            response = self.table.query(
+                ProjectionExpression="#yr, title, info.genres, info.actors[0]",
+                ExpressionAttributeNames={"#yr": "year"},
+                KeyConditionExpression=(
+                    Key('year').eq(year) &
+                    Key('title').between(title_bounds['first'], title_bounds['second'])))
+        except ClientError as err:
+            if err.response['Error']['Code'] == "ValidationException":
+                logger.warning(
+                    "There's a validation error. Here's the message: %s: %s",
+                    err.response['Error']['Code'], err.response['Error']['Message'])
+            else:
+                logger.error(
+                    "Couldn't query for movies. Here's why: %s: %s",
+                    err.response['Error']['Code'], err.response['Error']['Message'])
+                raise
+        else:
+            return response['Items']

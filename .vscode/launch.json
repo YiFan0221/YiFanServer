@@ -17,10 +17,15 @@
             "internalConsoleOptions": "neverOpen"
         },
         {
-            "name": ".NET Core Attach",
+            "name": "Python: YiFnServer-Test Mongo DB",
             "type": "python",
-            "request": "attach",
-            "processId": "${command:pickProcess}"
+            "request": "launch",
+            "program": "${workspaceFolder}/MongoDB/example.py", 
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "stopAtEntry": false,
+            "internalConsoleOptions": "neverOpen"
         },
 
     ],
