@@ -1,3 +1,4 @@
+import collections
 import pprint
 import pymongo
 username = "user0"
@@ -39,11 +40,12 @@ def Insert_one():
         "text": "My first blog post!",
         "tags": ["mongodb", "python", "pymongo"],
         "date": datetime.datetime.utcnow()}
+    collection = "apilog_fromLinebot"
     if(db==None):
         return False
     else:
-        posts = db.posts
-        post_id = posts.insert_one(post).inserted_id
+        apilog = db[collection]
+        post_id = apilog.insert_one(post).inserted_id
         print("post_id:"+str(post_id))
         return post_id
 
@@ -55,16 +57,16 @@ def Find_one(post_id):
     if(db==None):
         return print("Find nothing.")
     else:
-        posts = db.posts    
-        pprint.pprint(posts.find_one({"_id": post_id}))
+        apilog = db.apilog_fromLinebot    
+        pprint.pprint(apilog.find_one({"_id": post_id}))
         
 def Find(author):
     db = getDataBase()
     if(db==None):
         return print("Find nothing.")
     else:
-        posts = db.posts    
-        for post in posts.find({"author": author}):
+        apilog = db.apilog_fromLinebot    
+        for post in apilog.find({"author": author}):
             pprint.pprint(post)      
         
 #endregion ------ Find ------        
@@ -75,7 +77,7 @@ def delete(author):
     if(db==None):
         return print("Find nothing.")
     else:
-        col=db["posts"]
+        col=db["apilog_fromLinebot"]
         query = {"author": author}
         d = col.delete_many(query)
         print(d.deleted_count, " documents deleted !!")
