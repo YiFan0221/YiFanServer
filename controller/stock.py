@@ -9,6 +9,7 @@ from app_utils.app_result import result_json
 #-------------共用函式-------------
 from enum import Enum, unique
 
+from MongoDB.FuncMongodb import *
     
 @unique
 class BodyType(Enum):
@@ -43,8 +44,17 @@ def FuncEventLog(EventName,GETPOST):
     #TODO def FuncEventLog(EventName,GETPOST):
     #使用傳入的Post/Get種類{GETPOST}，與事件名稱{EventName}
     #ex : 'a [GET] [camera device list] event'
-    logging.info('a '+GETPOST+' ['+EventName+'] event')
-
+    st = 'a '+GETPOST+' ['+EventName+'] event'
+    logging.info(st)    
+    return st
+    
+def FuncEventLog(EventName,GETPOST,Para,Value):
+    #TODO def FuncEventLog(EventName,GETPOST):
+    #使用傳入的Post/Get種類{GETPOST}，與事件名稱{EventName}
+    #ex : 'a [GET] [camera device list] event'
+    st = 'a '+GETPOST+' ['+EventName+'] event >>{'+ Para + ":" + Value +"}"
+    logging.info(st)    
+    return st
 def FuncEventExecSDK(EventSDKAPI,*args):
     #TODO def FuncEventExecSDK(EventSDKAPI,*args):
     #執行所登入的SDK(或其他)函式
@@ -120,9 +130,11 @@ def Post_LINE():
   returnStr            = ""
   returnStr_200        = "Success"
   returnStr_400        = "Please check paras or query valid."
-  FuncEventLog(eventName,request.method)
   status=FuncGetFormValue(expectType,eventName)
-  returnStr = FuncEventExecSDK(eventSDKAPI,status)
+  Logst = FuncEventLog(eventName,request.method,eventName,status)
+  print(Logst)
+  Insert_APILog_Line(Logst)
+  #returnStr = FuncEventExecSDK(eventSDKAPI,status)
   return result_json(200, returnStr)
     
 @controller.route('/Echo', methods=["POST"])
@@ -162,8 +174,9 @@ def set_Echo():
   returnStr            = ""
   returnStr_200        = "Success"
   returnStr_400        = "Please check paras or query valid."
-  FuncEventLog(eventName,request.method)
   status=FuncGetFormValue(expectType,eventName)
+  Logst = FuncEventLog(eventName,request.method,eventName,status)
+  Insert_APILog_Line(Logst)
   returnStr = FuncEventExecSDK(eventSDKAPI,status)
   return result_json(200, returnStr)
 
@@ -196,7 +209,8 @@ def Get_SearchStock():
   returnStr            = ""
   returnStr_200        = "Success"
   returnStr_400        = "Please check paras or query valid."
-  FuncEventLog(eventName,request.method)
+  Logst = FuncEventLog(eventName,request.method,eventName,status)
+  Insert_APILog_Stock(Logst)
   status=FuncGetFormValue(expectType,eventName)
   returnStr = FuncEventExecSDK(eventSDKAPI,status)
   
