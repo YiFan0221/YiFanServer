@@ -176,6 +176,7 @@ def set_Echo():
   returnStr_400        = "Please check paras or query valid."
   status=FuncGetFormValue(expectType,eventName)
   Logst = FuncEventLog(eventName,request.method,eventName,status)
+  print(Logst)  
   Insert_APILog_Line(Logst)
   returnStr = FuncEventExecSDK(eventSDKAPI,status)
   return result_json(200, returnStr)
@@ -209,9 +210,10 @@ def Get_SearchStock():
   returnStr            = ""
   returnStr_200        = "Success"
   returnStr_400        = "Please check paras or query valid."
+  status=FuncGetFormValue(expectType,eventName)
   Logst = FuncEventLog(eventName,request.method,eventName,status)
   Insert_APILog_Stock(Logst)
-  status=FuncGetFormValue(expectType,eventName)
+  print(Logst)
   returnStr = FuncEventExecSDK(eventSDKAPI,status)
   
   m_data =returnStr
