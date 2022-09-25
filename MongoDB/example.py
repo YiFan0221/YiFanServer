@@ -1,22 +1,44 @@
+###
+# 撰寫來存取MongoDB的函式庫
+###
+
+
 import collections
+from enum import Enum, unique
 import pprint
 import pymongo
-username = "user0"
-password = "gary80221"
-conn_str = "mongodb+srv://"+username+":"+password+"@apilog0.amcx94o.mongodb.net/test?retryWrites=true&w=majority"
+username = None
+password = None
+conn_str = None
 import datetime
-post = {"author": "Mike",
-        "text": "My first blog post!",
-        "tags": ["mongodb", "python", "pymongo"],
-        "date": datetime.datetime.utcnow()}
 
 client =None
 db     =None
 
-#region ------ Common ------
+@unique
+class InfoType(Enum):
+    APILog_Trade = 'apilog_Trade'
+    APILog_Line = 'apilog_Line'
+    APILog_Stock = 'apilog_Stock'
+
+#region ------ Common Function------
+def ImportUserInfo(Src_username , Src_password):
+    global username
+    username = Src_username
+    global password
+    password = Src_password
+    global conn_str
+    conn_str = "mongodb+srv://"+username+":"+password+"@apilog0.amcx94o.mongodb.net/test?retryWrites=true&w=majority"
+    return conn_str
 def Clientinit():
+    global username
+    global password
     global client
-    global db
+    global db    
+    ImportUserInfo("user0","gary80221")
+    if(username==None or password==None):
+        return "username password is not ready."
+    
     client = pymongo.MongoClient(conn_str, serverSelectionTimeoutMS=5000)
     try:
         print(client.server_info())
@@ -31,60 +53,79 @@ def getDataBase():
         db = client['APILOG']
     else:
         return db
+    
+def getConnectInfo(Collections:InfoType):
+    #DataBase
+    global db    
+    db = getDataBase()
+    #Collections
+    collections = db[Collections.value]    
+    return collections
+    
+    
 #endregion ------ Common ------
 
 #region ------ Insert ------
-def Insert_one():
-    db = getDataBase()
-    post = {"author": "Mike",
-        "text": "My first blog post!",
-        "tags": ["mongodb", "python", "pymongo"],
-        "date": datetime.datetime.utcnow()}
-    collection = "apilog_fromLinebot"
-    if(db==None):
-        return False
-    else:
-        apilog = db[collection]
-        post_id = apilog.insert_one(post).inserted_id
-        print("post_id:"+str(post_id))
-        return post_id
+   
+def Insert_APILog_Trade(text:str):
+    return Insert_unit_nonTags(InfoType.APILog_Trade,text)
+    
+def Insert_APILog_Line(text:str):
+    return Insert_unit_nonTags(InfoType.APILog_Line,text)    
+
+def Insert_APILog_Stock(text:str):
+    return Insert_unit_nonTags(InfoType.APILog_Stock,text)    
+
+
+    
+def Insert_unit(Collections:InfoType,text:str,Tags:tuple):
+    #插入資料庫的根本函式
+    
+    #connect     
+    collections = getConnectInfo(Collections)
+
+    post = {
+    "TypeName":Collections.value,
+    "text": text,
+    "tags": [Collections.value, text],
+    "date": datetime.datetime.utcnow(),
+    }
+    
+    post_id = collections.insert_one(post).inserted_id
+    print("post_id:"+str(post_id))
+    return post_id
+
+def Insert_unit_nonTags(Collections:InfoType,text:str):
+    return Insert_unit(Collections,text,None)
 
 #endregion ------ Insert ------
 
 #region ------ Find ------
-def Find_one(post_id):
-    db = getDataBase()
-    if(db==None):
-        return print("Find nothing.")
-    else:
-        apilog = db.apilog_fromLinebot    
-        pprint.pprint(apilog.find_one({"_id": post_id}))
+def Find_one_byid(Collections:InfoType,post_id):
+    #connect     
+    collections = getConnectInfo(Collections)
+    pprint.pprint(collections.find_one({"_id": post_id}))
         
-def Find(author):
-    db = getDataBase()
-    if(db==None):
-        return print("Find nothing.")
-    else:
-        apilog = db.apilog_fromLinebot    
-        for post in apilog.find({"author": author}):
-            pprint.pprint(post)      
+def Find(Collections:InfoType,SelectItemName:str,SelectItem:str):
+    #connect     
+    collections = getConnectInfo(Collections)
+    for post in collections.find({SelectItemName: SelectItem}):
+        pprint.pprint(post)      
         
 #endregion ------ Find ------        
 
 #region ------ Delete ------
-def delete(author):
-    db = getDataBase()
-    if(db==None):
-        return print("Find nothing.")
-    else:
-        col=db["apilog_fromLinebot"]
-        query = {"author": author}
-        d = col.delete_many(query)
-        print(d.deleted_count, " documents deleted !!")
+def delete(Collections:InfoType,SelectItemName:str,SelectItem:str):
+    #connect     
+    collections = getConnectInfo(Collections)
+    query = {SelectItemName: SelectItem}
+    d = collections.delete_many(query)
+    print(d.deleted_count, " documents deleted !!")
+    
+    
         
 #endregion ------ Delete ------
 Clientinit()
-id=Insert_one()
-Find_one(id)
-Find("Mike")
-delete("Mike")
+id=Insert_unit_nonTags(InfoType.APILog_Line,"TEST message.")
+Find(InfoType.APILog_Line,"_id",id)
+# delete(InfoType.APILog_Line,"TypeName",InfoType.APILog_Line.value)
