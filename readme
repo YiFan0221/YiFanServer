@@ -20,7 +20,10 @@ sudo systemctl stop YiFanServer.service
 sudo systemctl daemon-reload
 sudo systemctl start YiFanServer.service
 sudo systemctl status YiFanServer.service
+sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 5000
 
+<轉發port> 
+sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 5000
 
 <Git>
 remote repository fetch:
