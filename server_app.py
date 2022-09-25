@@ -44,7 +44,6 @@ app.register_blueprint(tickerOrder_controller  , url_prefix='/Ticker')
 
 print("Connecting MongoDB.")
 Clientinit()
-Insert_one()
 print("Connected!")
 
 print(".......... Backend service start!")
