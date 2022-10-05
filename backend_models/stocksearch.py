@@ -129,7 +129,7 @@ def Func_SearchStock_cnyes(StockNum):
     
     #例外情形 返回無資料
     m_error = [tag.text for tag in soup.find_all("div", class_="jsx-3008000365")]
-    if(soup.title.string== '404' or str(m_error)!='[]'):
+    if(soup.title.string== '404' or str(m_error)=='[]'):
         rtn = '找不到相關資訊歐~'
         print(rtn)        
         return rtn
