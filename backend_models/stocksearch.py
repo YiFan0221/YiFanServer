@@ -129,7 +129,7 @@ def Func_SearchStock_cnyes(StockNum):
     
     #例外情形 返回無資料
     m_error = [tag.text for tag in soup.find_all("div", class_="jsx-3008000365")]
-    if(soup.title.string== '404' or str(m_error)=='[]'):
+    if(soup.title.string== '404' or str(m_error)!='[]'):
         rtn = '找不到相關資訊歐~'
         print(rtn)        
         return rtn
@@ -144,7 +144,7 @@ def Func_SearchStock_cnyes(StockNum):
     print("股票編號:"+str(m_ID[0]) )
 
     #名稱 #jsx-37573986 header_second 也可以
-    m_Name = [tag.text for tag in soup.find_all("div", {"class": "jsx-2715122309 main_subTitle"})]
+    m_Name = [tag.text for tag in soup.find_all("div", {"class": "jsx-652552899 main_subTitle"})]
     m_key.append('股票名稱')
     m_Value.append(m_Name[0])
     print("股票名稱:"+m_Name[0])     

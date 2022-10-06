@@ -23,14 +23,16 @@ def FuncGetFormValue(DataType:type , EventName,):
 
     #從Body取值
     getData:Any = None
-    if request.content_type.startswith('application/json'):         
-        data = json.loads(request.data)
-        getData = data[EventName]   
-        
-    elif request.content_type.startswith('multipart/form-data'):
-        getData=request.form.get(EventName) 
+    if request.content_type!= None:
+      if request.content_type.startswith('application/json'):         
+          data = json.loads(request.data)
+          getData = data[EventName]   
+          
+      elif request.content_type.startswith('multipart/form-data'):
+          getData=request.form.get(EventName) 
+    
     else:
-        return None
+          return None
 
     #將值依照所需轉型並回傳
     if DataType==int:
@@ -96,34 +98,63 @@ def FuncEventExecSDK(EventSDKAPI,*args):
 @controller.route('/LINEPost', methods=["POST"])
 def Post_LINE():  
   """
-    推送資訊到LINEBOT
+    主動推送資訊到LINEBOT
     ---
     tags:
-    -   Common API
-    description: 
-    -   主動推送資訊到LINEBOT
-
-    consumes:
-    -   application/json
-    parameters:
-    -   name: EchoInfo
-        in: body
-        required: true
-        schema:
-        properties:
-            text:
-                description: 要推送的資料
-                type: string                
+    - Common API
+    summary: 主動推送資訊到LINEBOT
+    description: 主動推送資訊到LINEBOT
+    requestBody:
+      description: 要推送的資料
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              text:
+                type: string
                 example: Hi~this from YiFanServer.swagger
-        required:
-            - text            
-
+      required: true
     responses:
       200:
-        description: Success   
+        description: Success
+        content: {}
       400:
         description: Please check paras or query valid.
-  """     
+        content: {}
+    x-codegen-request-body-name: body
+  """
+  
+  
+  # """
+  #   推送資訊到LINEBOT (Swagger 2.0)
+  #   ---
+  #   tags:
+  #   -   Common API
+  #   description: 
+  #   -   主動推送資訊到LINEBOT
+
+  #   consumes:
+  #   -   application/json
+  #   parameters:
+  #   -   name: EchoInfo
+  #       description: 要推送的資料
+  #       required: true
+  #       in: body        
+  #       schema:
+  #       properties:
+  #           text:                
+  #               type: string                
+  #               example: Hi~this from YiFanServer.swagger
+  #       required:
+  #           - text            
+
+  #   responses:
+  #     200:
+  #       description: Success   
+  #     400:
+  #       description: Please check paras or query valid.
+  # """     
   eventName:str    = 'text'
   eventSDKAPI:function =LinePost
   expectType:type      = string#int or bool
@@ -134,40 +165,41 @@ def Post_LINE():
   Logst = FuncEventLog(eventName,request.method,eventName,status)
   print(Logst)
   Insert_APILog_Line(Logst)
-  #returnStr = FuncEventExecSDK(eventSDKAPI,status)
+  returnStr = FuncEventExecSDK(eventSDKAPI,status)
   return result_json(200, returnStr)
     
 @controller.route('/Echo', methods=["POST"])
 def set_Echo():  
-  """
-    回應與傳入資訊相同的資料
-    ---
-    tags:
-    -   Common API
-    description: 
-    -   回應與傳入資訊相同的資料，通常用在LINEBOT測試
+  
+  # """
+  #   回應與傳入資訊相同的資料 (Swagger 2.0)
+  #   ---
+  #   tags:
+  #   -   Common API
+  #   description: 
+  #   -   回應與傳入資訊相同的資料，通常用在LINEBOT測試
 
-    consumes:
-    -   application/json
-    parameters:
-    -   name: EchoInfo
-        in: body
-        required: true
-        schema:
-        properties:
-            text:                
-                description: 輸入需要被回傳的資訊
-                type: string
-                example: Hi~YiFanServer
-        required:
-            - text            
+  #   consumes:
+  #   -   application/json
+  #   parameters:
+  #   -   name: EchoInfo
+  #       description: 輸入需要被回傳的資訊
+  #       required: true
+  #       in: body        
+  #       schema:
+  #       properties:
+  #           text:                                
+  #               type: json
+  #               example: Hi~YiFanServer
+  #       required:
+  #           - text            
 
-    responses:
-      200:
-        description: Success   
-      400:
-        description: Please check paras or query valid.
-  """     
+  #   responses:
+  #     200:
+  #       description: Success   
+  #     400:
+  #       description: Please check paras or query valid.
+  # """     
   eventName:str    = 'text'  
   eventSDKAPI:function =Func_Echo
   expectType:type      = string#int or bool
@@ -183,27 +215,67 @@ def set_Echo():
 
     
 
-@controller.route("/SearchStock",methods=['GET'])
+@controller.route("/SearchStock",methods=['GET']) 
 def Get_SearchStock():
+      #關於在GET請求中使用body【不建議在GET請求中使用body】
+      #https://www.796t.com/content/1564528803.html
+      
   """
     搜尋對應的股票資訊(爬蟲)
     ---
     tags:
-      - Stock
-    description:
-      搜尋股票資訊(爬蟲版)
-    produces: application/json,
-    parameters:
-    - name: name
-      in: path
-      required: true
-      type: string    
+    - Stock
+    summary: 搜尋對應的股票資訊(爬蟲)
+    description: 搜尋對應的股票資訊(爬蟲)
+    requestBody:
+        description: 要查詢的股票代號
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                text:
+                  type: string
+                  example: 2330
+        required: true
     responses:
-      400:
-        description: InvalidSignatureError
       200:
-        description: Receive Line request.
-  """
+        description: Success
+        content: {}
+      400:
+        description: Please check paras or query valid.
+        content: {}
+    x-codegen-request-body-name: body
+  """     
+      
+  # """
+  #   搜尋對應的股票資訊(爬蟲) (Swagger 2.0)
+  #   ---
+  #   tags:
+  #     - Stock
+  #   description:
+  #     搜尋股票資訊(爬蟲版)    
+  #   consumes:
+  #   -   application/json
+  #   parameters:
+  #   -   name: EchoInfo
+  #       description: 需要搜尋的股票代號
+  #       required: true
+  #       in: body        
+  #       schema:
+  #       properties:
+  #           text:                                
+  #               type: json
+  #               example: 2330
+  #       required:
+  #           - text           
+  
+  #   responses:
+  #     400:
+  #       description: InvalidSignatureError
+  #     200:
+  #       description: Receive Line request.
+  # """
   eventName:str    = 'text'  
   eventSDKAPI:function =Func_SearchStock_cnyes
   expectType:type      = string#int or bool

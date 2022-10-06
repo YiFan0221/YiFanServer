@@ -21,13 +21,26 @@ handler = WebhookHandler('976067291be71b6c3e6a3d5c161db416')
 Mode = 'setting'
 
 app = Flask(__name__)
+
+#(Swagger 2.0)
+# app.config['SWAGGER'] = {
+#     "title": "YiFanServer",
+#     "description": "Backend server of get linebot request.",
+#     "version": "1.0.0",
+#     "termsOfService": "",
+#     "hide_top_bar": False
+# }
+
+#(OpenAPI 3.0) 擇一
 app.config['SWAGGER'] = {
     "title": "YiFanServer",
     "description": "Backend server of get linebot request.",
     "version": "1.0.0",
+    'openapi': '3.0.1',
     "termsOfService": "",
-    "hide_top_bar": True
+    "hide_top_bar": False
 }
+
 # http://localhost:5000/apidocs
 # 如何寫yaml
 # https://codertw.com/%E7%A8%8B%E5%BC%8F%E8%AA%9E%E8%A8%80/614070/#outline__1_2_3
