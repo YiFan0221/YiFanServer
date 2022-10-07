@@ -171,6 +171,34 @@ def Post_LINE():
 @controller.route('/Echo', methods=["POST"])
 def set_Echo():  
   
+  """
+    回應與傳入資訊相同的資料 (open api)
+    ---
+    tags:
+    - Common API
+    summary: 回應與傳入資訊相同的資料
+    description: 回應與傳入資訊相同的資料，通常用在LINEBOT測試
+    requestBody:
+      description: 輸入需要被回傳的資訊
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              text:
+                type: string
+                example: Hi~YiFanServer
+      required: true
+    responses:
+      200:
+        description: Success
+        content: {}
+      400:
+        description: Please check paras or query valid.
+        content: {}
+    x-codegen-request-body-name: body
+  """
+  
   # """
   #   回應與傳入資訊相同的資料 (Swagger 2.0)
   #   ---
