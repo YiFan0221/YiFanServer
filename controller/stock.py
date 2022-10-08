@@ -54,7 +54,7 @@ def FuncEventLog(EventName,GETPOST,Para,Value):
     #TODO def FuncEventLog(EventName,GETPOST):
     #使用傳入的Post/Get種類{GETPOST}，與事件名稱{EventName}
     #ex : 'a [GET] [camera device list] event'
-    st = 'a '+GETPOST+' ['+EventName+'] event >>{'+ Para + ":" + Value +"}"
+    st = 'a '+GETPOST+' ['+EventName+'] event >>{'+ Para + ":" + str(Value) +"}"
     logging.info(st)    
     return st
 def FuncEventExecSDK(EventSDKAPI,*args):
@@ -94,6 +94,22 @@ def FuncEventExecSDK(EventSDKAPI,*args):
 #       return result_json(400, returnStr_400)
 
 
+#region ------ Get_TOP_N_Report ------
+ # GET Get_TOP_N_Report:#Get top post of ptt stock. Range:[ 0 - 40 ]
+@controller.route('/Get_TOP_N_Report', methods=["GET"])
+def api_get_get_top_n_report():  
+    eventName:str    = 'text'    
+    eventSDKAPI:function =Get_TOP_N_Report  
+    expectType:type      = int#int or bool
+    
+    status=FuncGetFormValue(expectType,eventName)
+    Logst = FuncEventLog(eventName,request.method,eventName,status)
+    Insert_APILog_Stock(Logst)
+    print(Logst)
+    returnStr = FuncEventExecSDK(eventSDKAPI,status)
+    return returnStr
+
+#endregion ------ Get_TOP_N_Report ------
 
 @controller.route('/LINEPost', methods=["POST"])
 def Post_LINE():  
@@ -179,7 +195,7 @@ def set_Echo():
     summary: 回應與傳入資訊相同的資料
     description: 回應與傳入資訊相同的資料，通常用在LINEBOT測試
     requestBody:
-      description: 輸入需要被回傳的資訊
+      description: 回應與傳入資訊相同的資料，通常用在LINEBOT測試
       content:
         application/json:
           schema:

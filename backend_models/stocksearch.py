@@ -78,7 +78,7 @@ def Func_PTTStock_TopN():
 
     total = len(article_list)
 
-    print('離開函式:Func_PTTStock_TopN 數量:'+str(total)) 
+    print("其他資訊:"+str(article_list))   
     return article_list
 
 #取得當前所有頁數
