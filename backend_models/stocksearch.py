@@ -6,15 +6,46 @@ import queue
 from xml.etree.ElementTree import TreeBuilder
 import requests
 from bs4 import BeautifulSoup
-from requests.packages.urllib3.exceptions import InsecureRequestWarning
-requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+# from requests.packages.urllib3.exceptions import InsecureRequestWarning
+# requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 rs = requests.session()
+
+from copyheaders import headers_raw_to_dict
+#抓header教學  https://blog.v123582.tw/2019/12/17/%E5%88%A9%E7%94%A8-Chrome-%E9%96%8B%E7%99%BC%E8%80%85%E5%B7%A5%E5%85%B7%E8%A7%80%E5%AF%9F-HTTP-Headers/
+r_h = b'''
+accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+accept-encoding: gzip, deflate, br
+accept-language: zh-TW,zh-HK;q=0.9,zh;q=0.8,en-US;q=0.7,en;q=0.6,ja;q=0.5
+cache-control: max-age=0
+cookie: __gads=ID=47e0715c10ead12f:T=1633485450:S=ALNI_MYh2jMq9I3khZT5fTlQSvP1sAHE_g; _gid=GA1.2.1537933614.1666283312; consentCookie=1666283909608; _ga_Q14GZ4B1PW=GS1.1.1666283312.9.1.1666285071.0.0.0; _ga=GA1.1.253690574.1625671363
+dnt: 1
+if-none-match: W/"2c4ac-OE3j6txsNxMXIBgc21JSgt8a1yU"
+sec-ch-ua: "Chromium";v="106", "Google Chrome";v="106", "Not;A=Brand";v="99"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "Windows"
+sec-fetch-dest: document
+sec-fetch-mode: navigate
+sec-fetch-site: same-origin
+sec-fetch-user: ?1
+upgrade-insecure-requests: 1
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36
+'''
+cookie='__gads=ID=47e0715c10ead12f:T=1633485450:S=ALNI_MYh2jMq9I3khZT5fTlQSvP1sAHE_g; _gid=GA1.2.1537933614.1666283312; consentCookie=1666283909608; _gat_UA-145056278-11=1; _gat=1; _gat_proj=1; _gat_cross=1; _gat_global=1; _gat_twstock=1; _ga_Q14GZ4B1PW=GS1.1.1666283312.9.1.1666285065.0.0.0; _ga=GA1.1.253690574.1625671363'
+StockHeader =headers_raw_to_dict(r_h)
+StockHeader["cookie"] = cookie
+
 
 #Cookie
 cookie='''XSRF-TOKEN=eyJpdiI6ImQ4S2pidDVIY3prbWdPRHVvY01RQmc9PSIsInZhbHVlIjoiR1ROckx2bnNmbEJwanNWQ1FKQldEXC8ydU5NQ2tCa25lWW1cL1RTMzBtVERmcUl2bERiaFRrZFNDbTNNK1A0UWN5IiwibWFjIjoiMTVhNDI2MTRmNTc4ZGM5MWZlZDAzODI3OGQyZDAzZTAzNGE2YTYwYjQ1OTI4Yjk0NTM1NGEzM2U5ODNkZGY0OSJ9; jvid_prod_session=gXIHtW1oTiDEuq0iX4RxmoFiheKqoD3TU8WBFw3F; __auc=1a77c905179cd8c88d30046a28a; _ga=GA1.2.1615784831.1622651210; _gid=GA1.2.1126861238.1622651210; _ga_Q4XDSLQE2E=GS1.1.1622651209.1.0.1622651212.0'''    
+PTTHeader = {
+    'method':'GET',
+    'scheme':'https',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36','Cookie': cookie}
+
 #Header
 #我電腦的
-header = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36','Cookie': cookie}
+
+
 #範例的
 #headers = {"user-agent": "Mozilla/5.0 (Windows NT 6.1) "
 #"AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36"}
@@ -38,7 +69,7 @@ def Get_TopRate(mode):
 def Func_PTTStock_TopN():
     print('進入函式:Func_PTTStock_TopN') 
     link = "https://www.ptt.cc/bbs/Stock/index.html" 
-    res_Page = rs.get(link,headers=header, timeout = 10,verify=False)  
+    res_Page = rs.get(link,headers=PTTHeader, timeout = 10,verify=False)  
     #例外資訊： socket.timeout: The read operation timed out                  
     soup = BeautifulSoup(res_Page.text, 'html.parser')
     
@@ -67,7 +98,7 @@ def Func_PTTStock_TopN():
     # 抓取 文章標題 網址 推文數
     while index_list:
         index = index_list.pop(0)        
-        res = rs.get(index,headers=header, timeout = 10, verify=False)
+        res = rs.get(index,headers=PTTHeader, timeout = 10, verify=False)
         # 如網頁忙線中,則先將網頁加入 index_list 並休息1秒後再連接
         if res.status_code != 200:
             #塞回去再來一次
@@ -124,7 +155,7 @@ def Func_SearchStock_cnyes(StockNum):
     print('進入函式:Func_SearchStock') 
     numstring = str(StockNum)
     link = "https://invest.cnyes.com/twstock/TWS/"+numstring+"/" 
-    res_Page = rs.get(link,headers=header, timeout = 10,verify=False)  
+    res_Page = rs.get(link,headers=StockHeader, timeout = 10,verify=False)  
     #PS.例外資訊： socket.timeout: The read operation timed out                  
     soup = BeautifulSoup(res_Page.text, 'html.parser')
     
@@ -186,11 +217,12 @@ def Func_SearchStock_cnyes(StockNum):
     m_Value.append(m_UpDownPercent[0])
     print("漲跌幅:"+str(m_UpDownPercent[0]))  
             
+    #尋訪各項目的元素
     for tag in soup.find_all("div", {"class": "jsx-3874884103 jsx-1763002358 data-block"}):
         Name = [val.text for val in tag.find_all("div", {"class": "jsx-3874884103 jsx-1763002358 block-title"})]
-        m_key.append(Name[0])         
+        m_key.append(Name[0])                                       
         value = [val.text for val in tag.find_all("div", {"class": "jsx-3874884103 jsx-1763002358 block-value block-value--"})]
-        if str(value) == "[]":
+        if len(value) == 0:                              
             value2 = [val.text for val in tag.find_all("div", {"class": "jsx-3874884103 jsx-1763002358 block-value block-value-- block-value--small"})]
             m_Value.append(value2[0])        
         else:
@@ -216,7 +248,7 @@ def Func_TopRate(TopNum,mode): #TopNum:int
     #    link = "https://goodinfo.tw/StockInfo/StockList.asp?RPT_TIME=&MARKET_CAT=熱門排行&INDUSTRY_CAT=自營商買超佔發行張數+–+5日%40%40自營商買超佔發行張數%40%40自營商+–+5日"
     link= "https://goodinfo.tw/StockInfo/StockList.asp?RPT_TIME=&MARKET_CAT=熱門排行&INDUSTRY_CAT="+mode+"買超佔發行張數+–+5日%40%40"+mode+"買超佔發行張數%40%40"+mode+"+–+5日"
     print(link+'\n')
-    res_Page = rs.get(link,headers=header, timeout = 15,verify=True)  
+    res_Page = rs.get(link,headers=StockHeader, timeout = 15,verify=True)  
     res_Page.encoding = res_Page.apparent_encoding#根據網站轉換編碼
 
     

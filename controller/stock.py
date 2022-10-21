@@ -336,11 +336,15 @@ def Get_SearchStock():
   if(type(m_data)== str):
       rtn_text =m_data
   else:
-      st=('股票名稱:'+m_data.get('股票名稱')+' ('+m_data.get('股票編號')+')\n'+
+      st=(
+      '股票名稱:'+m_data.get('股票名稱')+' ('+m_data.get('股票編號')+')\n'+
       '股票現價:'+m_data.get('股票現價')+'\n'+                         
       '漲跌:'+m_data.get('漲跌')+' ('+m_data.get('漲跌幅')+')\n'     
-      '本益比:'+m_data.get('本益比')+'\n'+     
-      '本淨比:'+m_data.get('本淨比'))
+      '昨收:'+m_data.get('昨收')+' 開盤:'+m_data.get('開盤')+' 收盤:'+m_data.get('收盤')+'\n'
+      
+      # '本益比:'+m_data.get('本益比')+'\n'+     
+      # '本淨比:'+m_data.get('本淨比')+'\n'+     
+      )
       rtn_text=st    
   return rtn_text  
 
