@@ -10,6 +10,9 @@ TimeoutSec=infinity
 RestartSec=10
 Restart=always
 Environment="PYTHONPATH=$PYTHONPATH:/home/yifan/.local/lib/python3.8/site-packages"
+Environment=LINEBOT_POST_TOKEN=QcRH4+cmpgKeP24rDsHblYBgd0qkifKrgJem7GxmHyXCYLvOdZqsUkLFASyAYhjRAiFkeiY8AYd+aF2fW9Zn1FcUc9QBB4AK7AATm1MVc47orHkod3ZAm8hAOsGOLcoSy1XeyZuk+2fN8Afccu97EwdB04t89/1O/w1cDnyilFU=
+Environment=LINEBOT_RECV_TOKEN=976067291be71b6c3e6a3d5c161db416
+Environment=CONNECTSTRING=mongodb+srv://user0:gary80221@apilog0.amcx94o.mongodb.net/test?retryWrites=true&w=majority
 [Install]
 WantedBy=multi-user.target
 
