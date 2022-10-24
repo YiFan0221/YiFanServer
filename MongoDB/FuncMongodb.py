@@ -4,6 +4,7 @@
 
 
 import collections
+import os
 from enum import Enum, unique
 import pprint
 import pymongo
@@ -22,22 +23,19 @@ class InfoType(Enum):
     APILog_Stock = 'apilog_Stock'
 
 #region ------ Common Function------
-def ImportUserInfo(Src_username , Src_password):
-    global username
-    username = Src_username
-    global password
-    password = Src_password
+def ImportUserInfoByENV():
     global conn_str
-    conn_str = "mongodb+srv://"+username+":"+password+"@apilog0.amcx94o.mongodb.net/test?retryWrites=true&w=majority"
+    conn_str = os.environ.get('CONNECTSTRING')
     return conn_str
+
 def Clientinit():
     global username
     global password
     global client
     global db    
-    ImportUserInfo("user0","gary80221")
-    if(username==None or password==None):
-        return "username password is not ready."
+    ImportUserInfoByENV()
+    if(conn_str==None):
+        return "Connection string is not ready."
     
     client = pymongo.MongoClient(conn_str, serverSelectionTimeoutMS=5000)
     try:

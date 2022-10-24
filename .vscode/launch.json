@@ -14,7 +14,8 @@
             "cwd": "${workspaceFolder}",
             "console": "integratedTerminal",
             "stopAtEntry": false,
-            "internalConsoleOptions": "neverOpen"
+            "internalConsoleOptions": "neverOpen",
+            "envFile": "${workspaceFolder}/.env"
         },
         {
             "name": "Python: YiFnServer-Test Mongo DB",

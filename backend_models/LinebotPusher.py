@@ -3,13 +3,13 @@ from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import * #MessageEvent,TextMessage,ImageSendMessage
 import requests
+import os
 
-line_bot_api = LineBotApi('QcRH4+cmpgKeP24rDsHblYBgd0qkifKrgJem7GxmHyXCYLvOdZqsUkLFASyAYhjRAiFkeiY8AYd+aF2fW9Zn1FcUc9QBB4AK7AATm1MVc47orHkod3ZAm8hAOsGOLcoSy1XeyZuk+2fN8Afccu97EwdB04t89/1O/w1cDnyilFU=')
+LINEBOT_POST_TOKEN = os.environ.get('LINEBOT_POST_TOKEN')
 
 def LinePost(strInfo):  
-    CHANNEL_ACCESS_TOKEN = 'QcRH4+cmpgKeP24rDsHblYBgd0qkifKrgJem7GxmHyXCYLvOdZqsUkLFASyAYhjRAiFkeiY8AYd+aF2fW9Zn1FcUc9QBB4AK7AATm1MVc47orHkod3ZAm8hAOsGOLcoSy1XeyZuk+2fN8Afccu97EwdB04t89/1O/w1cDnyilFU='
     userId = "U28f735e0a0bff2a9e5c6d75bbb4e1411"    
-    headers = {'Authorization':'Bearer '+CHANNEL_ACCESS_TOKEN,'Content-Type':'application/json'}
+    headers = {'Authorization':'Bearer '+LINEBOT_POST_TOKEN,'Content-Type':'application/json'}
     body = {
     'to':userId,
     'messages':[{
