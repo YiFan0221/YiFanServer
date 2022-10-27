@@ -9,7 +9,7 @@ from requests.packages.urllib3.exceptions import InsecureRequestWarning
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 rs = requests.session()
 
-from backend_models.picIV import Pic_Auth
+#from backend_models.picIV import Pic_Auth
 #Cookie
 cookie='''XSRF-TOKEN=eyJpdiI6ImQ4S2pidDVIY3prbWdPRHVvY01RQmc9PSIsInZhbHVlIjoiR1ROckx2bnNmbEJwanNWQ1FKQldEXC8ydU5NQ2tCa25lWW1cL1RTMzBtVERmcUl2bERiaFRrZFNDbTNNK1A0UWN5IiwibWFjIjoiMTVhNDI2MTRmNTc4ZGM5MWZlZDAzODI3OGQyZDAzZTAzNGE2YTYwYjQ1OTI4Yjk0NTM1NGEzM2U5ODNkZGY0OSJ9; jvid_prod_session=gXIHtW1oTiDEuq0iX4RxmoFiheKqoD3TU8WBFw3F; __auc=1a77c905179cd8c88d30046a28a; _ga=GA1.2.1615784831.1622651210; _gid=GA1.2.1126861238.1622651210; _ga_Q4XDSLQE2E=GS1.1.1622651209.1.0.1622651212.0'''    
 #Header
@@ -46,7 +46,8 @@ def Func_thsrcOrder():
     picurl = 'https://irs.thsrc.com.tw/'+src        
     response=requests.get(picurl,headers=header,verify=False)    
     print(response.content)
-    rtn_st=Pic_Auth(response.content)
+    #rtn_st=Pic_Auth(response.content)
+    rtn_st="暫停使用此功能"
     
     print('辨識結果'+rtn_st)
     print('離開函式:Func_thsrcOrder' ) 

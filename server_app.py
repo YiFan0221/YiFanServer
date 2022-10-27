@@ -10,9 +10,9 @@ from requests import *
 
 #其他後端function
 from backend_models.stocksearch import *
-from backend_models.picIV       import Pic_Auth
+#from backend_models.picIV       import Pic_Auth
 from controller.stock           import *
-from controller.tickerOrder     import *
+#from controller.tickerOrder     import *
 from app_utils.app_result       import requests_api
 from MongoDB.FuncMongodb        import *
 

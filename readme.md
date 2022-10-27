@@ -49,6 +49,59 @@ YiFanServer : Local Server
 > sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 5000
 
 <br><br />
+Docker 相關說明
+=============
+
+指令說明
+-------------
+
+
+### Docker build  -t 要建立出的image名稱  --no-cache 從頭執行
+> sudo docker build --no-cache -t gary80221/yifanserver .
+
+### 添加版本號
+> sudo docker tag <ContainerID> gary80221/yifanserver:\<version>
+
+### 將Image 作為容器
+
+> sudo docker run -e LINEBOT_POST_TOKEN={} LINEBOT_RECV_TOKEN = {} CONNECTSTRING = {}
+retryWrites=true&w=majority --rm --name yifanserver -p 4000:4000 -p 4000:4000/udp -i -t gary80221/yifanserver:\<version>
+
+### 啟用容器
+> sudo docker start yifanserver
+
+### 進入容器
+> sudo docker attach yifanserver
+
+### 在容器外對容器下命令 示範從外部執行 bash
+> sudo docker exec -it yifanserver /bin/bash
+
+<br><br />
+
+## 移除容器與IMAGE
+### 停止容器
+> sudo docker stop yifanserver
+### 移除容器
+> sudo docker rm yifanserver
+### 移除IMAGE
+> sudo docker rmi gary80221/yifanserver:\<version>
+
+<br><br />
+上傳 Docker Image 到 Docker Hub
+=============================
+#### 先登入
+    sudo docker login
+
+#### 推送到docker imagehub
+> sudo docker push gary80221/yifanserver:\<version>
+
+#### 到別台電腦在拉下來
+> sudo docker pull gary80221/yifanserver:\<version>
+
+
+
+
+<br><br />
 # Git remote repository fetch:
 http登入改為使用token 登入
 
