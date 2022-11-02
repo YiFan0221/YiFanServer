@@ -35,7 +35,9 @@ def Clientinit():
     global db    
     ImportUserInfoByENV()
     if(conn_str==None):
-        return "Connection string is not ready."
+        return "-1"
+    else:
+        print("Mongodb connection string : "+conn_str )
     
     client = pymongo.MongoClient(conn_str, serverSelectionTimeoutMS=5000)
     try:
@@ -121,6 +123,7 @@ def delete(Collections:InfoType,SelectItemName:str,SelectItem:str):
     
         
 #endregion ------ Delete ------
+
 Clientinit()
 id=Insert_unit_nonTags(InfoType.APILog_Line,"TEST message.")
 Find(InfoType.APILog_Line,"_id",id)

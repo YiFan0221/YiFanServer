@@ -16,9 +16,14 @@ from controller.stock           import *
 from app_utils.app_result       import requests_api
 from MongoDB.FuncMongodb        import *
 
+CONNECTSTRING = os.environ.get('CONNECTSTRING')
+LINEBOT_POST_TOKEN = os.environ.get('LINEBOT_POST_TOKEN')
+LINEBOT_RECV_TOKEN=  os.environ.get('LINEBOT_RECV_TOKEN')
+print("ENV:Mongodb_ConnString : "+CONNECTSTRING )
+print("ENV:LINEBOT_RECV_TOKEN : "+LINEBOT_RECV_TOKEN )
+print("ENV:LINEBOT_POST_TOKEN : "+LINEBOT_POST_TOKEN )
 
-
-handler = WebhookHandler('976067291be71b6c3e6a3d5c161db416')
+handler = WebhookHandler(LINEBOT_RECV_TOKEN)
 
 Mode = 'setting'
 
@@ -56,6 +61,7 @@ app.register_blueprint(ssh_controller          , url_prefix='/SSH')
 app.register_blueprint(stock_controller        , url_prefix='/Stock')
 app.register_blueprint(tickerOrder_controller  , url_prefix='/Ticker')
                             
+
 
 print("Connecting MongoDB.")
 Clientinit()

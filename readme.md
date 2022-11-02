@@ -89,15 +89,77 @@ retryWrites=true&w=majority --rm --name yifanserver -p 4000:4000 -p 4000:4000/ud
 <br><br />
 上傳 Docker Image 到 Docker Hub
 =============================
-#### 先登入
+### 先登入
     sudo docker login
 
-#### 推送到docker imagehub
+### 推送到docker imagehub
 > sudo docker push gary80221/yifanserver:\<version>
 
-#### 到別台電腦在拉下來
+### 到別台電腦在拉下來
 > sudo docker pull gary80221/yifanserver:\<version>
 
+<br><br />
+Docker compose
+=============================
+### 建立網路nat
+> docker network create nat
+
+### 建立 並使用三個容器分攤 (類似docker的run)
+> docker-compose up -d --scale yifanserver=3
+
+### 停止
+> docker-compose stop {name}
+
+### 開始
+> docker-compose start {name}
+
+### 移除 將較於up是建立 down則是移除 
+> docker-compose down
+#### 若要開啟3個容器則要再輸入一次 --scale yifanserver=3 
+
+<br><br />
+Docker compose env傳遞
+=============================
+
+### 直接讀取 .env檔案
+>    environment:
+
+>      CONNECTSTRING: ${CONNECTSTRING}
+>      LINEBOT_POST_TOKEN: ${LINEBOT_POST_TOKEN}
+>      LINEBOT_RECV_TOKEN: ${LINEBOT_RECV_TOKEN}     
+### 使用指令建立sercite
+> docker secret create {名稱} {檔案}
+
+### 建立"外部"secret 
+> printf "{內容}" | docker secret create {secret名稱} -
+
+
+#### ※這邊會需要登記約三個環境變數
+> printf "保密" | docker secret create LINEBOT_POST_TOKEN_secret -
+
+> printf "保密" | docker secret create LINEBOT_RECV_TOKEN_secret -
+
+> printf "保密" | docker secret create CONNECTSTRING_secret -
+
+### 檢視目前掛載的secret
+> docker secret ls
+
+### 使用"外部"secret
+
+> secrets:
+
+>      LINEBOT_POST_TOKEN_secret:
+>      external: true
+
+### 使用"內部"secret
+> secrets:
+
+>      CONNECTSTRING_secret:
+>      file: ./CONNECTSTRING_secret   
+
+
+### 觀看Logs資訊
+> docker-compose logs -f 
 
 
 
