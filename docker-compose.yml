@@ -1,25 +1,10 @@
 version: "3.3"
-secrets:
-  CONNECTSTRING_secret:
-    file: ./CONNECTSTRING_secret     
-  LINEBOT_POST_TOKEN_secret:
-    file: ./LINEBOT_POST_TOKEN_secret   
-  LINEBOT_RECV_TOKEN_secret:
-    file: ./LINEBOT_RECV_TOKEN_secret   
-   
-    
+  
 services:
   yifanserver:
     image: gary80221/yifanserver
     ports:
       - "5000"  
-
-    secrets:
-      - CONNECTSTRING_secret    
-      - LINEBOT_POST_TOKEN_secret
-      - LINEBOT_RECV_TOKEN_secret
-
-
     environment:
       CONNECTSTRING: ${CONNECTSTRING}
       LINEBOT_POST_TOKEN: ${LINEBOT_POST_TOKEN}
