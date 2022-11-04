@@ -4,7 +4,7 @@ services:
   yifanserver:
     image: gary80221/yifanserver
     ports:
-      - "5000"  
+      - "5000:5000"  
     build: .
     environment:
       CONNECTSTRING: ${CONNECTSTRING}
