@@ -1,2 +1,13 @@
 .env
 YiFanServer.service
+SSL_YiFanServer/ssl.conf
+SSL_AWS/yfnoip_ddns_net.pem
+SSL_AWS/YiFanServer.crt
+SSL_AWS/YiFanServer.csr
+SSL_AWS/YiFanServer.key
+SSL/YiFanServer.key
+SSL_YiFanServer/yfnoip_ddns_net.pem
+SSL_YiFanServer/yfnoip_ddns_net.pem-chain
+SSL_YiFanServer/YiFanServer.crt
+SSL_YiFanServer/YiFanServer.csr
+SSL_YiFanServer/YiFanServer.Key

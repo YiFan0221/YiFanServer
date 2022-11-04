@@ -19,9 +19,15 @@ from MongoDB.FuncMongodb        import *
 CONNECTSTRING = os.environ.get('CONNECTSTRING')
 LINEBOT_POST_TOKEN = os.environ.get('LINEBOT_POST_TOKEN')
 LINEBOT_RECV_TOKEN=  os.environ.get('LINEBOT_RECV_TOKEN')
+SERVER_PORT         = os.environ.get('YIFANSERV_SERVER_PORT')
+SSL_PEM             = os.environ.get('SSL_PEM')
+SSL_KEY             = os.environ.get('SSL_KEY')
+
 print("ENV:Mongodb_ConnString : "+CONNECTSTRING )
 print("ENV:LINEBOT_RECV_TOKEN : "+LINEBOT_RECV_TOKEN )
-print("ENV:LINEBOT_POST_TOKEN : "+LINEBOT_POST_TOKEN )
+print("ENV:SERVER_PORT        : "+str(SERVER_PORT) )
+print("ENV:SSL_PEM            : "+str( os.path.exists("/run/secrets/SSL_PEM") ))
+print("ENV:SSL_KEY            : "+str( os.path.exists("/run/secrets/SSL_KEY") ))
 
 handler = WebhookHandler(LINEBOT_RECV_TOKEN)
 
@@ -92,9 +98,13 @@ def ShowMode():
   return '現在模式為: '+Mode
 
       
+import ssl
+context = ssl.SSLContext()
+context.load_cert_chain(SSL_PEM,SSL_KEY)
+      
 if __name__ == '__main__':
-  #app.run(ssl_context=('./SSL/YiFanServer.crt', './SSL/YiFanServer.key'),host="0.0.0.0", port=5000 , threaded=True)
-  app.run(host="0.0.0.0", port=5000 , threaded=True)
+  app.run(ssl_context=context,host="0.0.0.0" ,port=SERVER_PORT, threaded=True)
+  #app.run(host="0.0.0.0", port=SERVER_PORT , threaded=True)
   
   
   
