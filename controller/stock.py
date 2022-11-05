@@ -1,9 +1,9 @@
 from . import stock_controller as controller
 from typing import Any
-from flask import app, request
-from flask.wrappers import Response
+from flask import request
 import json , logging , string
 from backend_models.stocksearch import *
+from backend_models.PTT_top_post import *
 from backend_models.LinebotPusher import *
 from app_utils.app_result import result_json
 #-------------共用函式-------------
@@ -16,6 +16,7 @@ class BodyType(Enum):
     applicationjson = 'multipart/form-data'
     multipartformdata = 'application/json'
     
+#-------------共用函式-------------    
 def FuncGetFormValue(DataType:type , EventName,):
     #TODO def FuncGetFormValue(DataType:type,EventName,)
     #根據傳入種類找尋網頁中屬於{EventName}的值
@@ -57,6 +58,7 @@ def FuncEventLog(EventName,GETPOST,Para,Value):
     st = 'a '+GETPOST+' ['+EventName+'] event >>{'+ Para + ":" + str(Value) +"}"
     logging.info(st)    
     return st
+
 def FuncEventExecSDK(EventSDKAPI,*args):
     #TODO def FuncEventExecSDK(EventSDKAPI,*args):
     #執行所登入的SDK(或其他)函式
@@ -68,8 +70,6 @@ def FuncEventExecSDK(EventSDKAPI,*args):
     else:#有帶參數值時將參數帶入函式執行
         return EventSDKAPI(*args)
     
-#-------------共用函式-------------
-
 #-------------API 框架範例-------------
 # <{}為說明Hint {}內為前者說明>
 #TODO#207{API No.}-set sharpness value{API名稱} #0-100{數值合法範圍}
@@ -99,7 +99,7 @@ def FuncEventExecSDK(EventSDKAPI,*args):
 @controller.route('/Get_TOP_N_Report', methods=["GET"])
 def api_get_get_top_n_report():  
     eventName:str    = 'text'    
-    eventSDKAPI:function =Get_TOP_N_Report  
+    eventSDKAPI:function =Func_Stock_PTT_TopN  
     expectType:type      = int#int or bool
     
     status=FuncGetFormValue(expectType,eventName)
@@ -256,9 +256,7 @@ def set_Echo():
   Insert_APILog_Line(Logst)
   returnStr = FuncEventExecSDK(eventSDKAPI,status)
   return result_json(200, returnStr)
-
-    
-
+  
 @controller.route("/SearchStock",methods=['GET']) 
 def Get_SearchStock():
       #關於在GET請求中使用body【不建議在GET請求中使用body】

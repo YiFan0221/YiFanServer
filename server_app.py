@@ -16,34 +16,28 @@ from controller.stock           import *
 from app_utils.app_result       import requests_api
 from MongoDB.FuncMongodb        import *
 
-CONNECTSTRING = os.environ.get('CONNECTSTRING')
-LINEBOT_POST_TOKEN = os.environ.get('LINEBOT_POST_TOKEN')
-LINEBOT_RECV_TOKEN=  os.environ.get('LINEBOT_RECV_TOKEN')
-SERVER_PORT         = os.environ.get('YIFANSERV_SERVER_PORT')
+print("[Inital][ENV]")
+LINEBOT_POST_TOKEN  = os.environ.get('LINEBOT_POST_TOKEN')
+LINEBOT_RECV_TOKEN  = os.environ.get('LINEBOT_RECV_TOKEN')
+CONNECTSTRING       = os.environ.get('CONNECTSTRING')
 SSL_PEM             = os.environ.get('SSL_PEM')
 SSL_KEY             = os.environ.get('SSL_KEY')
+SERVER_PORT         = os.environ.get('YIFANSERV_SERVER_PORT')
 
 print("ENV:Mongodb_ConnString : "+CONNECTSTRING )
 print("ENV:LINEBOT_RECV_TOKEN : "+LINEBOT_RECV_TOKEN )
 print("ENV:SERVER_PORT        : "+str(SERVER_PORT) )
-print("ENV:SSL_PEM            : "+str( os.path.exists("/run/secrets/SSL_PEM") ))
-print("ENV:SSL_KEY            : "+str( os.path.exists("/run/secrets/SSL_KEY") ))
+print("ENV:SECRETS_SSL_PEM    : "+str( os.path.exists("/run/secrets/SSL_PEM") ))
+print("ENV:SECRETS_SSL_KEY    : "+str( os.path.exists("/run/secrets/SSL_KEY") ))
+print("ENV:SSL_PEM            : "+str( SSL_PEM))
+print("ENV:SSL_KEY            : "+str( SSL_KEY))
 
 handler = WebhookHandler(LINEBOT_RECV_TOKEN)
 
 Mode = 'setting'
 
+print("[Inital][Swagger]")
 app = Flask(__name__)
-
-#(Swagger 2.0)
-# app.config['SWAGGER'] = {
-#     "title": "YiFanServer",
-#     "description": "Backend server of get linebot request.",
-#     "version": "1.0.0",
-#     "termsOfService": "",
-#     "hide_top_bar": False
-# }
-
 #(OpenAPI 3.0) 擇一
 app.config['SWAGGER'] = {
     "title": "YiFanServer",
@@ -53,72 +47,28 @@ app.config['SWAGGER'] = {
     "termsOfService": "",
     "hide_top_bar": False
 }
-
-# http://localhost:5000/apidocs
-# 如何寫yaml
-# https://codertw.com/%E7%A8%8B%E5%BC%8F%E8%AA%9E%E8%A8%80/614070/#outline__1_2_3
 CORS(app)
 Swagger(app)
 
-#registering blueprints
-#註冊其他藍圖中的controllers
+print("[Inital][blueprints]")
+#registering blueprints  #註冊其他藍圖中的controllers
 app.register_blueprint(modbus_controller       , url_prefix='/Modbus')
 app.register_blueprint(ssh_controller          , url_prefix='/SSH')
 app.register_blueprint(stock_controller        , url_prefix='/Stock')
 app.register_blueprint(tickerOrder_controller  , url_prefix='/Ticker')
                             
-
-
-print("Connecting MongoDB.")
+print("[Inital][MongoDB]")
 Clientinit()
-print("Connected!")
-
-print(".......... Backend service start!")
 
 @app.route("/")
 def home():
   return render_template("home.html")
-      
-      
-def SwitchSettingMode():
-  global Mode
-  if(Mode == 'setting'):
-    Mode = 'normal'
-  else :
-    Mode = 'setting'
-  return '更換為'+Mode
-def CheckSettingMode():
-  global Mode
-  if(Mode == 'setting'):
-    return True
-  else :
-    return False
-def ShowMode():
-  global Mode
-  return '現在模式為: '+Mode
-
-      
+            
+print("[Inital][SSL]")             
 import ssl
 context = ssl.SSLContext()
 context.load_cert_chain(SSL_PEM,SSL_KEY)
-      
+
+print("[Finnish].......... Backend service start!")      
 if __name__ == '__main__':
-  app.run(ssl_context=context,host="0.0.0.0" ,port=SERVER_PORT, threaded=True)
-  #app.run(host="0.0.0.0", port=SERVER_PORT , threaded=True)
-  
-  
-  
-  
-  
-  
-  
-  
-  
-#添加SSL
-#https://medium.com/@charming_rust_oyster_221/flask-%E9%85%8D%E7%BD%AE-https-%E7%B6%B2%E7%AB%99-ssl-%E5%AE%89%E5%85%A8%E8%AA%8D%E8%AD%89-36dfeb609fa8
-#產生KEY
-#https://blog.miniasp.com/post/2019/02/25/Creating-Self-signed-Certificate-using-OpenSSL
-#取得授承認的SSL
-#https://certbot.eff.org/instructions?ws=other&os=ubuntufocal
-#如何在 VSCode 設定完整的 .NET Core 建置、發行與部署工作 看第四點
-#https://blog.miniasp.com/post/2019/01/22/Configure-Tasks-and-Launch-in-VSCode-for-NET-Core
+  app.run(ssl_context=context,host="0.0.0.0" ,port=SERVER_PORT, threaded=True)  
