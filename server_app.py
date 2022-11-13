@@ -64,11 +64,14 @@ Clientinit()
 def home():
   return render_template("home.html")
             
-print("[Inital][SSL]")             
 import ssl
-context = ssl.SSLContext()
-context.load_cert_chain(SSL_PEM,SSL_KEY)
 
 print("[Finnish].......... Backend service start!")      
 if __name__ == '__main__':
-  app.run(ssl_context=context,host="0.0.0.0" ,port=SERVER_PORT, threaded=True)  
+  if(SSL_PEM!=None and SSL_KEY!=None):
+    print("[Inital][SSL]")             
+    context = ssl.SSLContext()
+    context.load_cert_chain(SSL_PEM,SSL_KEY)
+    app.run(ssl_context=context,host="0.0.0.0" ,port=SERVER_PORT, threaded=True)  
+  else:
+    app.run(host="0.0.0.0" ,port=SERVER_PORT, threaded=True)  
