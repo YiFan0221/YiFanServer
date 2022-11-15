@@ -257,7 +257,7 @@ def set_Echo():
   returnStr = FuncEventExecSDK(eventSDKAPI,status)
   return result_json(200, returnStr)
   
-@controller.route("/SearchStock",methods=['GET']) 
+@controller.route("/SearchStock",methods=['POST']) 
 def Get_SearchStock():
       #關於在GET請求中使用body【不建議在GET請求中使用body】
       #https://www.796t.com/content/1564528803.html
