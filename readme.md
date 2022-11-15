@@ -110,6 +110,9 @@ Docker compose
 * 建立網路nat
 > docker network create nat
 
+* 安裝swarm
+> docker swarm init
+
 * 建立 並使用三個容器分攤 (類似docker的run)
 > docker-compose up -d --scale yifanserver=3
 

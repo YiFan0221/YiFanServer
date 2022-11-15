@@ -68,10 +68,11 @@ import ssl
 
 print("[Finnish].......... Backend service start!")      
 if __name__ == '__main__':
+  context = ssl.SSLContext()
   if(SSL_PEM!=None and SSL_KEY!=None):
-    print("[Inital][SSL]")             
-    context = ssl.SSLContext()
-    context.load_cert_chain(SSL_PEM,SSL_KEY)
-    app.run(ssl_context=context,host="0.0.0.0" ,port=SERVER_PORT, threaded=True)  
-  else:
-    app.run(host="0.0.0.0" ,port=SERVER_PORT, threaded=True)  
+    print("[Inital][SSL]")                 
+    context.load_cert_chain(SSL_PEM,SSL_KEY)    
+    app.run(ssl_context=context,host="0.0.0.0" ,port=int(SERVER_PORT), threaded=True)  
+  else:    
+    app.run(host="0.0.0.0" ,port=int(SERVER_PORT), threaded=True)  
+  

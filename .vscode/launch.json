@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: YiFnServer-FLASK專案-Backend",
+            "name": "Python: YiFanServer-FLASK專案-Backend",
             "type": "python",
             "request": "launch",
             // "preLaunchTask": "build",
@@ -18,7 +18,7 @@
             "envFile": "${workspaceFolder}/.env"
         },
         {
-            "name": "Python: YiFnServer-Test Mongo DB",
+            "name": "Python: YiFanServer-Test Mongo DB",
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/MongoDB/example.py", 
