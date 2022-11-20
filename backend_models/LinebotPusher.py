@@ -6,9 +6,10 @@ import requests
 import os
 
 LINEBOT_POST_TOKEN = os.environ.get('LINEBOT_POST_TOKEN')
+LINEBOT_POST_LINEID= os.environ.get('LINEBOT_POST_LINEID')
 
 def LinePost(strInfo):  
-    userId = "U28f735e0a0bff2a9e5c6d75bbb4e1411"    
+    userId = LINEBOT_POST_LINEID   
     headers = {'Authorization':'Bearer '+LINEBOT_POST_TOKEN,'Content-Type':'application/json'}
     body = {
     'to':userId,
@@ -19,7 +20,7 @@ def LinePost(strInfo):
     }
     # 向指定網址發送 request
     
-    #先關閉 否則會爆掉 <但此行可用>
+    #先關閉 否則會超過每月限制 <但此行可用>
     req = requests.request('POST', 'https://api.line.me/v2/bot/message/push',headers=headers,data=json.dumps(body).encode('utf-8'))
     print(req.text)
     return 200
