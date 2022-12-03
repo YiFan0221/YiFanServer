@@ -107,7 +107,7 @@ def api_get_get_top_n_report():
     Insert_APILog_Stock(Logst)
     print(Logst)
     returnStr = FuncEventExecSDK(eventSDKAPI,status)
-    return returnStr
+    return result_json(200, returnStr)
 
 #endregion ------ Get_TOP_N_Report ------
 
@@ -344,5 +344,5 @@ def Get_SearchStock():
       # '本淨比:'+m_data.get('本淨比')+'\n'+     
       )
       rtn_text=st    
-  return rtn_text  
+  return result_json(200, rtn_text)
 
