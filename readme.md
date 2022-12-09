@@ -1,13 +1,15 @@
 
 # 專案說明
 ===================
-## 此服務用來被LineBot所呼叫。
+## 此服務用來被LineBot所呼叫背後主要爬蟲等核心服務。
 
-LineBot : heroku
-<br><br />
-YiFanServer : Local Server
+![](/ReadmePic/pic0.jpg)
+### LineBot : AWS/LocalServer
 
-# 環境參數
+### YiFanServer : AWS/LocalServer
+
+
+# 所需環境參數
 ## [Environment]
 * LINEBOT_POST_TOKEN = {from post token}
 * LINEBOT_RECV_TOKEN = {from post token}
