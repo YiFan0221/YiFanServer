@@ -10,6 +10,19 @@ PTTHeader = {
     'scheme':'https',
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36','Cookie': cookie}
 
+def over18(URL:str,header):
+    res = rs.get(URL,headers=header, timeout = 10,verify=False)
+    # 先檢查網址是否包含'over18'字串 ,如有則為18禁網站
+    if 'over18' in res.url:
+        print("18禁網頁")
+        strURL= URL[18:len(URL)]
+        
+        load = {
+            'from': strURL,
+            'yes': 'yes'
+        }
+        res = rs.post('https://www.ptt.cc/ask/over18', timeout = 10, verify=False, data=load)
+    return res
 
 def Get_TOP_N_Report(PTT_URL,num,boardname):  
     if(num>20 or num<=0):
@@ -29,26 +42,23 @@ def Get_TOP_N_Report(PTT_URL,num,boardname):
     return st
     
 def Func_PTT_TopN(PTT_URL,boardname):
-    
-    link = PTT_URL 
-    res_Page = rs.get(link,headers=PTTHeader, timeout = 10,verify=False)  
-    #例外資訊： socket.timeout: The read operation timed out                  
-    soup = BeautifulSoup(res_Page.text, 'html.parser')
+    res_Page =over18(PTT_URL,PTTHeader)  
+    soup = BeautifulSoup(res_Page.text, 'html.parser')  
     
     #print(soup) 
     #例外情形 返回無資料
     m_error = [tag.text for tag in soup.find_all("div", class_="jsx-3008000365")]
-    R18     = [tag.text for tag in soup.find_all("div", class_="over18-notice")]
+    # R18     = [tag.text for tag in soup.find_all("div", class_="over18-notice")]
     if(soup.title.string== '404' or str(m_error)!='[]'):
         rtn = '找不到相關資訊歐~'
         print(rtn)
         return rtn  
-    elif(str(R18)!='[]'):
-        rtn = '偵測到R18檢核 開發中'
-        print(rtn)
-        return rtn 
+    # elif(str(R18)!='[]'):
+    #     rtn = '偵測到R18檢核 開發中'
+    #     print(rtn)
+    #     return rtn 
     
-    index_list = []
+    URL_List = []
     
     article_list = []
     
@@ -59,17 +69,18 @@ def Func_PTT_TopN(PTT_URL,boardname):
     for page in range(End_page-1, End_page+1, 1):        
         page_url = 'https://www.ptt.cc/bbs/{}/index{}.html'.format(boardname, page)
         #print('URL:'+page_url)
-        index_list.append(page_url)        
+        URL_List.append(page_url)        
 
     # 抓取 文章標題 網址 推文數
-    while index_list:
-        index = index_list.pop(0)        
-        res = rs.get(index,headers=PTTHeader, timeout = 10, verify=False)
+    while URL_List:
+        URL = URL_List.pop(0)        
+        res =over18(URL ,PTTHeader)   
+        soup = BeautifulSoup(res.text, 'html.parser')  
         # 如網頁忙線中,則先將網頁加入 index_list 並休息1秒後再連接
         if res.status_code != 200:
             #塞回去再來一次
-            index_list.append(index)
-            time.sleep(1)
+            URL_List.append(URL)
+            time.sleep(0.5)
         else:
             article_list.extend(TopN_GrabPageInfo(res))#往後加入列表
         time.sleep(0.05)

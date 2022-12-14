@@ -107,5 +107,29 @@ def api_get_Gossiping_top_n_report():
     returnStr = FuncEventExecSDK(eventSDKAPI,status)
     return result_json(200, returnStr)
 
+@controller.route('/Get_Sex_TOP_N_Report', methods=["GET"])
+def api_get_Sex_top_n_report():  
+    eventName:str    = 'text'    
+    eventSDKAPI:function =Func_Sex_PTT_TopN  
+    expectType:type      = int#int or bool
+    
+    status=FuncGetFormValue(expectType,eventName)
+    Logst = FuncEventLog(eventName,request.method,eventName,status)    
+    print(Logst)
+    returnStr = FuncEventExecSDK(eventSDKAPI,status)
+    return result_json(200, returnStr)
+
+@controller.route('/Get_Beauty_TOP_N_Report', methods=["GET"])
+def api_get_Beauty_top_n_report():  
+    eventName:str    = 'text'    
+    eventSDKAPI:function =Func_Beauty_PTT_TopN  
+    expectType:type      = int#int or bool
+    
+    status=FuncGetFormValue(expectType,eventName)
+    Logst = FuncEventLog(eventName,request.method,eventName,status)    
+    print(Logst)
+    returnStr = FuncEventExecSDK(eventSDKAPI,status)
+    return result_json(200, returnStr)
+
 #endregion ------ Get_TOP_N_Report ------
   
