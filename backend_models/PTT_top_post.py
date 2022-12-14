@@ -15,13 +15,16 @@ def Get_TOP_N_Report(PTT_URL,num,boardname):
     if(num>20 or num<=0):
         return "超出上限(20筆)囉"
     st='TOP前'+str(num)+'\n'        
-    m_data =Func_PTT_TopN(PTT_URL,boardname)                
-    print("Data len:"+str(len(m_data))) 
-    for i in range(0,num+3,1):
-        data=m_data.pop()
-        #濾掉置頂文章,將列表加入列表
-        if i>=3:
-            st += str(i-2)+':['+data['rate']+'] '+data['title']+' '+data['url']+'\n'            
+    m_data =Func_PTT_TopN(PTT_URL,boardname) 
+    
+    if type(m_data)==str:
+        return m_data
+    else:
+        for i in range(0,num+3,1):
+            data=m_data.pop()
+            #濾掉置頂文章,將列表加入列表
+            if i>=3:
+                st += str(i-2)+':['+data['rate']+'] '+data['title']+' '+data['url']+'\n'            
     print(st)    
     return st
     
@@ -35,10 +38,15 @@ def Func_PTT_TopN(PTT_URL,boardname):
     #print(soup) 
     #例外情形 返回無資料
     m_error = [tag.text for tag in soup.find_all("div", class_="jsx-3008000365")]
+    R18     = [tag.text for tag in soup.find_all("div", class_="over18-notice")]
     if(soup.title.string== '404' or str(m_error)!='[]'):
         rtn = '找不到相關資訊歐~'
         print(rtn)
         return rtn  
+    elif(str(R18)!='[]'):
+        rtn = '偵測到R18檢核 開發中'
+        print(rtn)
+        return rtn 
     
     index_list = []
     
