@@ -125,6 +125,6 @@ def delete(Collections:InfoType,SelectItemName:str,SelectItem:str):
         
 #endregion ------ Delete ------
 Clientinit()
-id=Insert_unit_nonTags(InfoType.APILog_Line,"TEST message.")
-Find(InfoType.APILog_Line,"_id",id)
+# id=Insert_unit_nonTags(InfoType.APILog_Line,"EXAMPLEFILE.")
+# Find(InfoType.APILog_Line,"_id",id)
 # delete(InfoType.APILog_Line,"TypeName",InfoType.APILog_Line.value)

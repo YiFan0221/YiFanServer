@@ -26,7 +26,8 @@ def Pic_Auth(Src):
         print('辨識失敗:'+result +' 長度:'+str(len(result)))
     else:
         print('辨識結果:'+result +' 長度:'+str(len(result)))
-    return result
     print('離開函式:Pic_Auth' )
+    return result
+    
     
 

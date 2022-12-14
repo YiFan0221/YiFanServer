@@ -16,7 +16,7 @@ class BodyType(Enum):
     applicationjson = 'multipart/form-data'
     multipartformdata = 'application/json'
     
-#-------------共用函式-------------    
+#region -------------共用函式-------------    
 def FuncGetFormValue(DataType:type , EventName,):
     #TODO def FuncGetFormValue(DataType:type,EventName,)
     #根據傳入種類找尋網頁中屬於{EventName}的值
@@ -69,8 +69,9 @@ def FuncEventExecSDK(EventSDKAPI,*args):
         return EventSDKAPI() 
     else:#有帶參數值時將參數帶入函式執行
         return EventSDKAPI(*args)
+#endregion  -------------共用函式-------------        
     
-#-------------API 框架範例-------------
+#region -------------API 框架範例-------------
 # <{}為說明Hint {}內為前者說明>
 #TODO#207{API No.}-set sharpness value{API名稱} #0-100{數值合法範圍}
 # @controller.route('sharpness_color'{URL}, methods=["POST"]{GET/POST})
@@ -92,7 +93,7 @@ def FuncEventExecSDK(EventSDKAPI,*args):
 #       return result_json(200, returnStr_200)
 #     else:
 #       return result_json(400, returnStr_400)
-
+#endregion -------------API 框架範例-------------
 
 #region ------ Get_TOP_N_Report ------
  # GET Get_TOP_N_Report:#Get top post of ptt stock. Range:[ 0 - 40 ]
@@ -103,8 +104,7 @@ def api_get_get_top_n_report():
     expectType:type      = int#int or bool
     
     status=FuncGetFormValue(expectType,eventName)
-    Logst = FuncEventLog(eventName,request.method,eventName,status)
-    Insert_APILog_Stock(Logst)
+    Logst = FuncEventLog(eventName,request.method,eventName,status)    
     print(Logst)
     returnStr = FuncEventExecSDK(eventSDKAPI,status)
     return result_json(200, returnStr)
@@ -180,7 +180,7 @@ def Post_LINE():
   status=FuncGetFormValue(expectType,eventName)
   Logst = FuncEventLog(eventName,request.method,eventName,status)
   print(Logst)
-  Insert_APILog_Line(Logst)
+  Insert_APILog_Linebot(Logst)
   returnStr = FuncEventExecSDK(eventSDKAPI,status)
   return result_json(200, returnStr)
     
@@ -253,7 +253,7 @@ def set_Echo():
   status=FuncGetFormValue(expectType,eventName)
   Logst = FuncEventLog(eventName,request.method,eventName,status)
   print(Logst)  
-  Insert_APILog_Line(Logst)
+  Insert_APILog_Linebot(Logst)
   returnStr = FuncEventExecSDK(eventSDKAPI,status)
   return result_json(200, returnStr)
   
@@ -326,7 +326,7 @@ def Get_SearchStock():
   returnStr_400        = "Please check paras or query valid."
   status=FuncGetFormValue(expectType,eventName)
   Logst = FuncEventLog(eventName,request.method,eventName,status)
-  Insert_APILog_Stock(Logst)
+  Insert_APILog_StockSearchlog(Logst)
   print(Logst)
   returnStr = FuncEventExecSDK(eventSDKAPI,status)
   

@@ -4,7 +4,7 @@ from linebot import  WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import * #MessageEvent,TextMessage,ImageSendMessage
 import tempfile
-from controller import stock_controller, modbus_controller,ssh_controller,tickerOrder_controller
+from controller import stock_controller, modbus_controller,other_controller,tickerOrder_controller
 from flasgger import Swagger
 from requests import *
 
@@ -12,6 +12,7 @@ from requests import *
 from backend_models.stocksearch import *
 #from backend_models.picIV       import Pic_Auth
 from controller.stock           import *
+from controller.other           import *
 #from controller.tickerOrder     import *
 from app_utils.app_result       import requests_api
 from MongoDB.FuncMongodb        import *
@@ -53,8 +54,8 @@ Swagger(app)
 print("[Inital][blueprints]")
 #registering blueprints  #註冊其他藍圖中的controllers
 app.register_blueprint(modbus_controller       , url_prefix='/Modbus')
-app.register_blueprint(ssh_controller          , url_prefix='/SSH')
 app.register_blueprint(stock_controller        , url_prefix='/Stock')
+app.register_blueprint(other_controller        , url_prefix='/Other')
 app.register_blueprint(tickerOrder_controller  , url_prefix='/Ticker')
                             
 print("[Inital][MongoDB]")

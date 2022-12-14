@@ -18,9 +18,10 @@ db     =None
 
 @unique
 class InfoType(Enum):
-    APILog_Trade = 'apilog_Trade'
-    APILog_Line = 'apilog_Line'
-    APILog_Stock = 'apilog_Stock'
+    SysLog = 'SYSLog'
+    APILog_Linebot = 'apilog_Linebot'
+    APILog_StockSearchlog = 'apilog_StockSearchlog'
+    APILog_PostRank = 'apilog_PostRank'
 
 #region ------ Common Function------
 def ImportUserInfoByENV():
@@ -70,11 +71,14 @@ def getConnectInfo(Collections:InfoType):
 def Insert_APILog_Trade(text:str):
     return Insert_unit_nonTags(InfoType.APILog_Trade,text)
     
-def Insert_APILog_Line(text:str):
-    return Insert_unit_nonTags(InfoType.APILog_Line,text)    
+def Insert_APILog_Linebot(text:str):
+    return Insert_unit_nonTags(InfoType.APILog_Linebot,text)    
 
-def Insert_APILog_Stock(text:str):
-    return Insert_unit_nonTags(InfoType.APILog_Stock,text)    
+def Insert_APILog_PostRank(text:str):
+    return Insert_unit_nonTags(InfoType.APILog_PostRank,text)  
+
+def Insert_APILog_StockSearchlog(text:str):
+    return Insert_unit_nonTags(InfoType.APILog_StockSearchlog,text)    
     
 def Insert_unit(Collections:InfoType,text:str,Tags:tuple):
     #插入資料庫的根本函式
@@ -125,6 +129,6 @@ def delete(Collections:InfoType,SelectItemName:str,SelectItem:str):
 #endregion ------ Delete ------
 
 Clientinit()
-id=Insert_unit_nonTags(InfoType.APILog_Line,"TEST message.")
-Find(InfoType.APILog_Line,"_id",id)
+id=Insert_unit_nonTags(InfoType.SysLog,"System On.")
+Find(InfoType.APILog_Linebot,"_id",id)#display 
 # delete(InfoType.APILog_Line,"TypeName",InfoType.APILog_Line.value)

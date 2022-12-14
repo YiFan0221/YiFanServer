@@ -32,12 +32,10 @@ def Func_Echo(mtext):
     return mtext
 
 def Func_Stock_PTT_TopN(num):
-    print('進入函式:Func_PTTStock_TopN') 
     PTT_URL = "https://www.ptt.cc/bbs/Stock/index.html"
     return Get_TOP_N_Report(PTT_URL,num)
     
 def Func_SearchStock_cnyes(StockNum):
-    print('進入函式:Func_SearchStock') 
     numstring = str(StockNum)
     link = "https://invest.cnyes.com/twstock/TWS/"+numstring+"/" 
     res_Page = rs.get(link,headers=StockHeader, timeout = 10,verify=False)  
