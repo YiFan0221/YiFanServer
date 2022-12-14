@@ -33,7 +33,7 @@ def Func_Echo(mtext):
 
 def Func_Stock_PTT_TopN(num):
     PTT_URL = "https://www.ptt.cc/bbs/Stock/index.html"
-    return Get_TOP_N_Report(PTT_URL,num)
+    return Get_TOP_N_Report(PTT_URL,num,"Stock")
     
 def Func_SearchStock_cnyes(StockNum):
     numstring = str(StockNum)

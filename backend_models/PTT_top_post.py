@@ -5,16 +5,17 @@ rs = requests.session()
 #Cookie
 cookie='''XSRF-TOKEN=eyJpdiI6ImQ4S2pidDVIY3prbWdPRHVvY01RQmc9PSIsInZhbHVlIjoiR1ROckx2bnNmbEJwanNWQ1FKQldEXC8ydU5NQ2tCa25lWW1cL1RTMzBtVERmcUl2bERiaFRrZFNDbTNNK1A0UWN5IiwibWFjIjoiMTVhNDI2MTRmNTc4ZGM5MWZlZDAzODI3OGQyZDAzZTAzNGE2YTYwYjQ1OTI4Yjk0NTM1NGEzM2U5ODNkZGY0OSJ9; jvid_prod_session=gXIHtW1oTiDEuq0iX4RxmoFiheKqoD3TU8WBFw3F; __auc=1a77c905179cd8c88d30046a28a; _ga=GA1.2.1615784831.1622651210; _gid=GA1.2.1126861238.1622651210; _ga_Q4XDSLQE2E=GS1.1.1622651209.1.0.1622651212.0'''    
 PTTHeader = {
+    'over18':'1;',
     'method':'GET',
     'scheme':'https',
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36','Cookie': cookie}
 
 
-def Get_TOP_N_Report(PTT_URL,num):  
+def Get_TOP_N_Report(PTT_URL,num,boardname):  
     if(num>20 or num<=0):
         return "超出上限(20筆)囉"
     st='TOP前'+str(num)+'\n'        
-    m_data =Func_PTT_TopN(PTT_URL)                
+    m_data =Func_PTT_TopN(PTT_URL,boardname)                
     print("Data len:"+str(len(m_data))) 
     for i in range(0,num+3,1):
         data=m_data.pop()
@@ -24,7 +25,7 @@ def Get_TOP_N_Report(PTT_URL,num):
     print(st)    
     return st
     
-def Func_PTT_TopN(PTT_URL):
+def Func_PTT_TopN(PTT_URL,boardname):
     
     link = PTT_URL 
     res_Page = rs.get(link,headers=PTTHeader, timeout = 10,verify=False)  
@@ -43,13 +44,12 @@ def Func_PTT_TopN(PTT_URL):
     
     article_list = []
     
-    board = 'Stock'
     all_page_url = soup.select('.btn.wide')[1]['href']
     End_page = TopN_get_pagenumber(all_page_url)
     #print(End_page)  
     #取預計找尋的頁數
     for page in range(End_page-1, End_page+1, 1):        
-        page_url = 'https://www.ptt.cc/bbs/{}/index{}.html'.format(board, page)
+        page_url = 'https://www.ptt.cc/bbs/{}/index{}.html'.format(boardname, page)
         #print('URL:'+page_url)
         index_list.append(page_url)        
 

@@ -1,4 +1,4 @@
-from . import stock_controller as controller
+from . import other_controller as controller
 from typing import Any
 from flask import request
 import json , logging , string
@@ -95,8 +95,7 @@ def FuncEventExecSDK(EventSDKAPI,*args):
 #endregion -----------API 框架範例-------------
 
 #region ------ Get_TOP_N_Report ------
- # GET Get_TOP_N_Report:#Get top post of ptt stock. Range:[ 0 - 40 ]
-@controller.route('/Get_TOP_N_Report', methods=["GET"])
+@controller.route('/Get_Gossiping_TOP_N_Report', methods=["GET"])
 def api_get_Gossiping_top_n_report():  
     eventName:str    = 'text'    
     eventSDKAPI:function =Func_Gossiping_PTT_TopN  
