@@ -80,7 +80,7 @@ def Func_PTT_TopN(PTT_URL,boardname):
         if res.status_code != 200:
             #塞回去再來一次
             URL_List.append(URL)
-            time.sleep(0.5)
+            time.sleep(1)
         else:
             article_list.extend(TopN_GrabPageInfo(res))#往後加入列表
         time.sleep(0.05)
