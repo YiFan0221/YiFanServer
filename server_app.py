@@ -25,7 +25,7 @@ SSL_PEM             = os.environ.get('SSL_PEM')
 SSL_KEY             = os.environ.get('SSL_KEY')
 SERVER_PORT         = os.environ.get('YIFANSERV_SERVER_PORT')
 
-print("ENV:Mongodb_ConnString : "+CONNECTSTRING )
+# print("ENV:Mongodb_ConnString : "+CONNECTSTRING )
 print("ENV:LINEBOT_RECV_TOKEN : "+LINEBOT_RECV_TOKEN )
 print("ENV:SERVER_PORT        : "+str(SERVER_PORT) )
 print("ENV:SECRETS_SSL_PEM    : "+str( os.path.exists("/run/secrets/SSL_PEM") ))
