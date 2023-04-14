@@ -46,7 +46,91 @@ def Func_SearchStock_cnyes(StockNum):
     # m_error = [tag.text for tag in soup.find_all("div", class_="jsx-3008000365")]
     m_error = [tag.text for tag in soup.find_all("div", {"class": "jsx-3008000365"})]
     
-    m_Name  = [tag.text for tag in soup.find_all("div", {"class": "jsx-652552899 main_subTitle"})]
+    m_resault = soup.find_all('h2', class_="jsx-3098318342")
+    #m_Name  = [tag.text for tag in soup.find_all("div", {"class": "jsx-3098318342"},recursive=False)]
+    belemtchange = len(m_resault)==0
+    b404 = soup.title.string== '404'
+    bError =  str(m_error)!='[]'
+    
+    if(b404 or bError or belemtchange):
+        rtn=""
+        if belemtchange == True:
+            rtn += '來源改變，請通知回報錯誤;'
+        if b404 == True:
+            rtn += '找不到相關資訊;'
+        if bError == True:
+            rtn += '來源回報錯誤;'
+        print(rtn)        
+        return rtn
+
+    m_key=[]
+    m_Value=[]
+    
+    #股票編號 
+    m_ID = StockNum   
+    m_key.append('股票編號')
+    m_Value.append(m_ID)
+    print("股票編號:"+str(m_ID[0]) )
+
+    #名稱 #jsx-37573986 header_second 也可以
+    
+    
+    m_Name = m_resault[0].contents[0]
+                
+    m_key.append('股票名稱')
+    m_Value.append(m_Name)
+    print("股票名稱:"+m_Name)     
+    
+    #現價
+    m_resault = soup.find_all('div', class_="jsx-3098318342 price")   
+    m_Price = m_resault[0].contents[0].text
+    m_key.append('股票現價')
+    m_Value.append(m_Price)
+    print("股票現價:"+str(m_Price))       
+
+    #漲跌
+    m_UpDown = m_resault[0].contents[1].contents[0].contents[0].text
+    m_key.append('漲跌')
+    m_Value.append(m_UpDown)
+    print("漲跌:"+str(m_UpDown))  
+    
+    #漲跌幅
+    m_UpDownPercent = m_resault[0].contents[1].contents[0].contents[1].text
+    m_key.append('漲跌幅')
+    m_Value.append(m_UpDownPercent)
+    print("漲跌幅:"+str(m_UpDownPercent))  
+            
+    #尋訪各項目的元素
+    # for tag in soup.find_all("div", {"class": "jsx-1282029765 detail-content"}):
+    #     Name = [val.text for val in tag.find_all("div", {"class": "jsx-1282029765 label"})]
+    #     m_key.append(Name[0])                                       
+    #     value = [val.text for val in tag.find_all("div", {"class": "jsx-1282029765 value"})]
+    #     if len(value) == 0:                              
+    #         value2 = [val.text for val in tag.find_all("div", {"class": "jsx-3874884103 jsx-1763002358 block-value block-value-- block-value--small"})]
+    #         m_Value.append(value2[0])        
+    #     else:
+    #         m_Value.append(value[0])  
+    #轉換看這篇:
+    #https://blog.csdn.net/loner_fang/article/details/80940600    
+    m_data_zip=[]
+    m_data_zip = zip(m_key,m_Value)
+    m_data_dict = dict(m_data_zip)
+    print("其他資訊:"+str(m_data_dict))
+    print('離開函式:Func_SearchStock')   
+    return m_data_dict
+   
+def Func_SearchStock_cnyes_old(StockNum):
+    numstring = str(StockNum)
+    link = "https://invest.cnyes.com/twstock/TWS/"+numstring+"/" 
+    res_Page = rs.get(link,headers=StockHeader, timeout = 10,verify=False)  
+    #PS.例外資訊： socket.timeout: The read operation timed out                  
+    soup = BeautifulSoup(res_Page.text, 'html.parser')
+    
+    #例外情形 返回無資料
+    # m_error = [tag.text for tag in soup.find_all("div", class_="jsx-3008000365")]
+    m_error = [tag.text for tag in soup.find_all("div", {"class": "jsx-3008000365"})]
+    
+    m_Name  = [tag.text for tag in soup.find_all("div", {"class": "jsx-3098318342"})]
     belemtchange = len(m_Name)==0
     if(belemtchange==True): #try another
         m_Name  = [tag.text for tag in soup.find_all("div", {"class": "jsx-2625558795 header_second"})]
@@ -118,5 +202,4 @@ def Func_SearchStock_cnyes(StockNum):
     print("其他資訊:"+str(m_data_dict))
     print('離開函式:Func_SearchStock')   
     return m_data_dict
-   
    

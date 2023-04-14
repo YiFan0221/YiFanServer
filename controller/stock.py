@@ -338,7 +338,7 @@ def Get_SearchStock():
       '股票名稱:'+m_data.get('股票名稱')+' ('+m_data.get('股票編號')+')\n'+
       '股票現價:'+m_data.get('股票現價')+'\n'+                         
       '漲跌:'+m_data.get('漲跌')+' ('+m_data.get('漲跌幅')+')\n'     
-      '昨收:'+m_data.get('昨收')+' 開盤:'+m_data.get('開盤')+' 收盤:'+m_data.get('收盤')+'\n'
+      # '昨收:'+m_data.get('昨收')+' 開盤:'+m_data.get('開盤')+' 收盤:'+m_data.get('收盤')+'\n'
       
       # '本益比:'+m_data.get('本益比')+'\n'+     
       # '本淨比:'+m_data.get('本淨比')+'\n'+     
