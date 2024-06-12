@@ -37,7 +37,7 @@ def Func_Stock_PTT_TopN(num):
     
 def Func_SearchStock_cnyes(StockNum):
     numstring = str(StockNum)
-    link = "https://invest.cnyes.com/twstock/TWS/"+numstring+"/" 
+    link = "https://invest.cnyes.com/twstock/"+numstring+"/" 
     res_Page = rs.get(link,headers=StockHeader, timeout = 10,verify=False)  
     #PS.例外資訊： socket.timeout: The read operation timed out                  
     soup = BeautifulSoup(res_Page.text, 'html.parser')
@@ -46,7 +46,7 @@ def Func_SearchStock_cnyes(StockNum):
     # m_error = [tag.text for tag in soup.find_all("div", class_="jsx-3008000365")]
     m_error = [tag.text for tag in soup.find_all("div", {"class": "jsx-3008000365"})]
     
-    m_resault = soup.find_all('h2', class_="jsx-3098318342")
+    m_resault = soup.find_all('h2', class_="jsx-2312976322")
     #m_Name  = [tag.text for tag in soup.find_all("div", {"class": "jsx-3098318342"},recursive=False)]
     belemtchange = len(m_resault)==0
     b404 = soup.title.string== '404'
@@ -70,7 +70,7 @@ def Func_SearchStock_cnyes(StockNum):
     m_ID = StockNum   
     m_key.append('股票編號')
     m_Value.append(m_ID)
-    print("股票編號:"+str(m_ID[0]) )
+    print("股票編號:"+str(m_ID) )
 
     #名稱 #jsx-37573986 header_second 也可以
     
@@ -82,7 +82,7 @@ def Func_SearchStock_cnyes(StockNum):
     print("股票名稱:"+m_Name)     
     
     #現價
-    m_resault = soup.find_all('div', class_="jsx-3098318342 price")   
+    m_resault = soup.find_all('div', class_="jsx-2312976322 price")   
     m_Price = m_resault[0].contents[0].text
     m_key.append('股票現價')
     m_Value.append(m_Price)
