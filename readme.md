@@ -3,7 +3,7 @@ YiFanServer
 ===================
 作為分散式架構架構中的副服務,
 
-主要展現backend, 爬蟲 crawler build and delivery Docker container
+主要展現backend, 爬蟲 crawler, function could be scale up, build and delivery Docker container
 
 主服務git link: [TeaOrFish](https://github.com/YiFan0221/TeaOrFish)
 
