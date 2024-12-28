@@ -1,4 +1,6 @@
 .env
+__pycache__/
+*.pyc
 YiFanServer.service
 SSL_YiFanServer/ssl.conf
 SSL_AWS/yfnoip_ddns_net.pem
