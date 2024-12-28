@@ -1,7 +1,7 @@
 
 YiFanServer
 ===================
-作為分散式架構架構中的副服務,
+作為架構中的副服務,
 
 主要展現backend, 爬蟲 crawler, function could be scale up, build and delivery Docker container
 
