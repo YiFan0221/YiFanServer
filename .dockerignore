@@ -10,3 +10,4 @@ bat_ngrok.bat
 SSL_AWS/
 SSL_YiFanServer/
 .env
+venv/*

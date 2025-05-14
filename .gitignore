@@ -13,3 +13,4 @@ SSL_YiFanServer/yfnoip_ddns_net.pem-chain
 SSL_YiFanServer/YiFanServer.crt
 SSL_YiFanServer/YiFanServer.csr
 SSL_YiFanServer/YiFanServer.Key
+venv/*
